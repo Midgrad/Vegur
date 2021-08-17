@@ -17,12 +17,16 @@ public:
     QStringList routes() const;
 
 public slots:
+    void filter(const QString& filterString);
+
     void createRoute(const QString& name);
+    void removeRoute(const QString& name);
 
 signals:
     void routesChanged();
 
 private:
+    QString m_filterString;
     domain::IRoutesRepository* const m_repository;
 };
 } // namespace vegur::endpoint

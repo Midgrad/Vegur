@@ -22,11 +22,29 @@ RoutesController::RoutesController(QObject* parent) :
 
 QStringList RoutesController::routes() const
 {
-    return m_repository->routes();
+    QStringList list;
+
+    for (const QString& route : m_repository->routes())
+    {
+        if (m_filterString.isEmpty() || route.contains(m_filterString, Qt::CaseInsensitive))
+            list.append(route);
+    }
+    return list;
+}
+
+void RoutesController::filter(const QString& filterString)
+{
+    m_filterString = filterString;
+    emit routesChanged();
 }
 
 void RoutesController::createRoute(const QString& name)
 {
     // TODO: route types & templates
     m_repository->saveRoute(name, QJsonObject());
+}
+
+void RoutesController::removeRoute(const QString& name)
+{
+    m_repository->removeRoute(name);
 }

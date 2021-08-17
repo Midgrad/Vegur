@@ -45,6 +45,7 @@ Controls.Button {
                         checkable: true
                         checked: true
                         iconSource: "qrc:/icons/filter.svg"
+                        onClicked: filterField.forceActiveFocus()
                     }
 
                     Controls.Button {
@@ -53,6 +54,7 @@ Controls.Button {
                         leftCropped: true
                         checkable: true
                         iconSource: "qrc:/icons/plus.svg"
+                        onClicked: nameField.forceActiveFocus()
                     }
                 }
 
@@ -61,6 +63,8 @@ Controls.Button {
                     flat: true
                     placeholderText: qsTr("Filter routes")
                     visible: filterMode.checked
+                    onVisibleChanged: clear()
+                    onTextChanged: controller.filter(text)
                     Layout.fillWidth: true
                 }
 
@@ -89,9 +93,9 @@ Controls.Button {
                 id: list
                 model: controller.routes
                 emptyText: qsTr("No routes")
-                delegate: Controls.Label {
+                delegate: Route {
                     width: parent.width
-                    text: modelData
+                    route: modelData
                 }
                 Layout.fillWidth: true
                 Layout.fillHeight: true
