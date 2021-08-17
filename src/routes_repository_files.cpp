@@ -11,12 +11,16 @@ RoutesRepositoryFiles::RoutesRepositoryFiles(const QString& path, QObject* paren
 {
     if (!m_dir.exists())
         m_dir.mkpath(".");
+
+    m_watcher.addPath(m_dir.path());
+    connect(&m_watcher, &QFileSystemWatcher::directoryChanged, this,
+            &RoutesRepositoryFiles::routesChanged);
 }
 
 QStringList RoutesRepositoryFiles::routes() const
 {
     QStringList routes;
-    for (const QFileInfo& fileInfo : m_dir.entryList({ ".json" }, QDir::Files))
+    for (const QFileInfo& fileInfo : m_dir.entryList({ "*.json" }, QDir::Files))
     {
         routes.append(fileInfo.fileName());
     }

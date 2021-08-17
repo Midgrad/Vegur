@@ -23,8 +23,7 @@ public:
     virtual void removeRoute(const QString& route) = 0;
 
 signals:
-    void routeAdded(QString route);
-    void routeRemoved(QString route);
+    void routesChanged();
 };
 } // namespace vegur::domain
 

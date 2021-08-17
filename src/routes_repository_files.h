@@ -4,6 +4,7 @@
 #include "i_routes_repository.h"
 
 #include <QDir>
+#include <QFileSystemWatcher>
 
 namespace vegur::domain
 {
@@ -21,6 +22,7 @@ public:
     void removeRoute(const QString& route) override;
 
 private:
+    QFileSystemWatcher m_watcher;
     const QDir m_dir;
 };
 } // namespace vegur::domain

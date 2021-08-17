@@ -6,11 +6,11 @@
 
 #include "routes_controller.h"
 
-using namespace draken::app;
+using namespace vegur::app;
 
 void registerTypes()
 {
-    qmlRegisterType<draken::endpoint::RoutesController>("Dreka.Vegur", 1, 0, "RoutesController");
+    qmlRegisterType<vegur::endpoint::RoutesController>("Dreka.Vegur", 1, 0, "RoutesController");
 }
 
 Q_COREAPP_STARTUP_FUNCTION(registerTypes);

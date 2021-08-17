@@ -2,23 +2,31 @@
 
 #include <QDebug>
 
-#include "i_property_tree.h"
-#include "locator.h"
+#include "routes_repository_files.h"
 
 namespace
 {
-constexpr char adsb[] = "adsb";
+constexpr char folder[] = "./routes";
 }
 
-using namespace kjarni::domain;
-using namespace draken::endpoint;
+using namespace vegur::domain;
+using namespace vegur::endpoint;
 
-RoutesController::RoutesController(QObject* parent) : QObject(parent)
+RoutesController::RoutesController(QObject* parent) :
+    QObject(parent),
+    m_repository(new domain::RoutesRepositoryFiles(::folder, this))
 {
-    // FIXME: demonstration routes
+    connect(m_repository, &domain::IRoutesRepository::routesChanged, this,
+            &RoutesController::routesChanged);
 }
 
-QJsonArray RoutesController::routes() const
+QStringList RoutesController::routes() const
 {
-    return m_routes;
+    return m_repository->routes();
+}
+
+void RoutesController::createRoute(const QString& name)
+{
+    // TODO: route types & templates
+    m_repository->saveRoute(name, QJsonObject());
 }

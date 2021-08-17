@@ -1,28 +1,30 @@
-#ifndef VEHICLES_CONTROLLER_H
-#define VEHICLES_CONTROLLER_H
+#ifndef ROUTES_CONTROLLER_H
+#define ROUTES_CONTROLLER_H
 
-#include <QJsonArray>
-#include <QObject>
+#include "i_routes_repository.h"
 
-namespace draken::endpoint
+namespace vegur::endpoint
 {
 class RoutesController : public QObject
 {
     Q_OBJECT
 
-    Q_PROPERTY(QJsonArray routes READ routes NOTIFY routesChanged)
+    Q_PROPERTY(QStringList routes READ routes NOTIFY routesChanged)
 
 public:
     explicit RoutesController(QObject* parent = nullptr);
 
-    QJsonArray routes() const;
+    QStringList routes() const;
+
+public slots:
+    void createRoute(const QString& name);
 
 signals:
     void routesChanged();
 
 private:
-    QJsonArray m_routes;
+    domain::IRoutesRepository* const m_repository;
 };
-} // namespace draken::endpoint
+} // namespace vegur::endpoint
 
-#endif // VEHICLES_CONTROLLER_H
+#endif // ROUTES_CONTROLLER_H

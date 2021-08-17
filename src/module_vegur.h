@@ -3,7 +3,7 @@
 
 #include "i_module.h"
 
-namespace draken::app
+namespace vegur::app
 {
 class ModuleVegur
     : public QObject
@@ -18,6 +18,6 @@ public:
 
     void visit(QJsonObject& features) override;
 };
-} // namespace draken::app
+} // namespace vegur::app
 
 #endif // MODULE_VEGUR_H
