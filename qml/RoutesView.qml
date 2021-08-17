@@ -25,7 +25,7 @@ Controls.Button {
         width: Controls.Theme.baseSize * 10
         height: Math.min(implicitHeight, main.availableHeight)
         y: root.height + Controls.Theme.margins
-        x: root.x
+        x: -root.parent.x
 
         ColumnLayout {
             anchors.fill: parent
