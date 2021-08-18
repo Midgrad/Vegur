@@ -1,6 +1,8 @@
 #ifndef ROUTES_CONTROLLER_H
 #define ROUTES_CONTROLLER_H
 
+#include <QJsonArray>
+
 #include "i_routes_repository.h"
 
 namespace vegur::endpoint
@@ -9,18 +11,18 @@ class RoutesController : public QObject
 {
     Q_OBJECT
 
-    Q_PROPERTY(QStringList routes READ routes NOTIFY routesChanged)
+    Q_PROPERTY(QJsonArray routes READ routes NOTIFY routesChanged)
 
 public:
     explicit RoutesController(QObject* parent = nullptr);
 
-    QStringList routes() const;
+    QJsonArray routes() const;
 
 public slots:
     void filter(const QString& filterString);
 
     void createRoute(const QString& name);
-    void removeRoute(const QString& name);
+    void removeRoute(const QString& routeId);
 
 signals:
     void routesChanged();

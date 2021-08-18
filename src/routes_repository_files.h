@@ -5,6 +5,7 @@
 
 #include <QDir>
 #include <QFileSystemWatcher>
+#include <QMap>
 
 namespace vegur::domain
 {
@@ -15,15 +16,19 @@ class RoutesRepositoryFiles : public IRoutesRepository
 public:
     RoutesRepositoryFiles(const QString& path, QObject* parent = nullptr);
 
-    QStringList routes() const override;
-    QJsonObject route(const QString& route) const override;
+    QList<QJsonObject> routes() const override;
+    QJsonObject route(const QString& routeId) const override;
 
-    void saveRoute(const QString& route, const QJsonObject& data) override;
-    void removeRoute(const QString& route) override;
+    void saveRoute(const QJsonObject& routeData) override;
+    void removeRoute(const QString& routeId) override;
+
+private slots:
+    void scanRoutes();
 
 private:
-    QFileSystemWatcher m_watcher;
     const QDir m_dir;
+    QFileSystemWatcher m_watcher;
+    QMap<QString, QJsonObject> m_routes;
 };
 } // namespace vegur::domain
 

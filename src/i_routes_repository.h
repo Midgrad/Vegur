@@ -4,6 +4,8 @@
 #include <QJsonObject>
 #include <QObject>
 
+#include "route_traits.h"
+
 namespace vegur::domain
 {
 // TODO: Generic IJsonRepository
@@ -16,13 +18,16 @@ public:
     {
     }
 
-    virtual QStringList routes() const = 0;
-    virtual QJsonObject route(const QString& route) const = 0;
+    virtual QList<QJsonObject> routes() const = 0;
+    virtual QJsonObject route(const QString& routeId) const = 0;
 
-    virtual void saveRoute(const QString& route, const QJsonObject& data) = 0;
-    virtual void removeRoute(const QString& route) = 0;
+    virtual void saveRoute(const QJsonObject& routeData) = 0;
+    virtual void removeRoute(const QString& routeId) = 0;
 
 signals:
+    void routeAdded(QString routeId);
+    void routeChanged(QString routeId);
+    void routeRemoved(QString routeId);
     void routesChanged();
 };
 } // namespace vegur::domain

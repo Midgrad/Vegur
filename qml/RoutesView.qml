@@ -73,7 +73,7 @@ Controls.Button {
                     flat: true
                     placeholderText: qsTr("Route filename")
                     visible: addMode.checked
-                    isValid: text.length > 3 && !controller.routes.includes(text + ".json")
+                    isValid: text.length > 3 && !controller.routes.includes(text)
                     Layout.fillWidth: true
                 }
 
@@ -83,7 +83,7 @@ Controls.Button {
                     visible: addMode.checked
                     iconSource: "qrc:/icons/ok.svg"
                     onClicked: {
-                        controller.createRoute(nameField.text + ".json");
+                        controller.createRoute(nameField.text);
                         nameField.clear();
                     }
                 }

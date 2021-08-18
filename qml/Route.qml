@@ -11,7 +11,7 @@ RowLayout {
     spacing: 0
 
     Controls.Label {
-        text: route
+        text: route.name
         Layout.fillWidth: true
     }
 
@@ -43,7 +43,7 @@ RowLayout {
         visible: yesNo
         type: Controls.Theme.Negative
         iconSource: "qrc:/icons/remove.svg"
-        onClicked: controller.removeRoute(route)
+        onClicked: controller.removeRoute(route.id)
     }
 
     Controls.Button {

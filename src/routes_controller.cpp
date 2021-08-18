@@ -7,7 +7,7 @@
 namespace
 {
 constexpr char folder[] = "./routes";
-}
+} // namespace
 
 using namespace vegur::domain;
 using namespace vegur::endpoint;
@@ -20,16 +20,17 @@ RoutesController::RoutesController(QObject* parent) :
             &RoutesController::routesChanged);
 }
 
-QStringList RoutesController::routes() const
+QJsonArray RoutesController::routes() const
 {
-    QStringList list;
+    QJsonArray routes;
 
-    for (const QString& route : m_repository->routes())
+    for (const QJsonObject& route : m_repository->routes())
     {
-        if (m_filterString.isEmpty() || route.contains(m_filterString, Qt::CaseInsensitive))
-            list.append(route);
+        QString name = route.value(rote_params::name).toString();
+        if (m_filterString.isEmpty() || name.contains(m_filterString, Qt::CaseInsensitive))
+            routes.append(route);
     }
-    return list;
+    return routes;
 }
 
 void RoutesController::filter(const QString& filterString)
@@ -40,11 +41,14 @@ void RoutesController::filter(const QString& filterString)
 
 void RoutesController::createRoute(const QString& name)
 {
+    QJsonObject route;
+    route.insert(rote_params::name, name);
+    // TODO: utils name to path
     // TODO: route types & templates
-    m_repository->saveRoute(name, QJsonObject());
+    m_repository->saveRoute(route);
 }
 
-void RoutesController::removeRoute(const QString& name)
+void RoutesController::removeRoute(const QString& routeId)
 {
-    m_repository->removeRoute(name);
+    m_repository->removeRoute(routeId);
 }
