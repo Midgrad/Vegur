@@ -18,6 +18,7 @@ public:
     {
     }
 
+    virtual QStringList ids() const = 0;
     virtual QList<QJsonObject> routes() const = 0;
     virtual QJsonObject route(const QString& routeId) const = 0;
 

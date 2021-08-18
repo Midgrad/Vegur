@@ -16,6 +16,7 @@ class RoutesRepositoryFiles : public IRoutesRepository
 public:
     RoutesRepositoryFiles(const QString& path, QObject* parent = nullptr);
 
+    QStringList ids() const;
     QList<QJsonObject> routes() const override;
     QJsonObject route(const QString& routeId) const override;
 

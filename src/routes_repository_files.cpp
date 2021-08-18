@@ -21,6 +21,11 @@ RoutesRepositoryFiles::RoutesRepositoryFiles(const QString& path, QObject* paren
     this->scanRoutes();
 }
 
+QStringList RoutesRepositoryFiles::ids() const
+{
+    return m_routes.keys();
+}
+
 QList<QJsonObject> RoutesRepositoryFiles::routes() const
 {
     return m_routes.values();

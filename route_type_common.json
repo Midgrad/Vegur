@@ -1,0 +1,20 @@
+{
+    "name": "Common route",
+    "waypoint_types:": [
+        {
+            "name": "Waypoint",
+            "params": [
+                {
+                    "name": "Coordinate",
+                    "type": "coordinate",
+                    "default_value": "0.0:0.0"
+                },
+                {
+                    "name": "Altitude",
+                    "type": "real",
+                    "default_value": 0.0
+                }
+            ]
+        }
+    ]
+}

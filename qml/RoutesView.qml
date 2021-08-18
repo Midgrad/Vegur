@@ -16,8 +16,6 @@ Controls.Button {
     highlighted: popup.visible
     onClicked: popup.visible ? popup.close() : popup.open()
 
-    Controls.ButtonGroup { buttons: modeRow.children }
-
     Controls.Popup {
         id: popup
 
@@ -34,58 +32,19 @@ Controls.Button {
             RowLayout {
                 spacing: Controls.Theme.spacing
 
-                RowLayout {
-                    id: modeRow
-                    spacing: 0
-
-                    Controls.Button {
-                        id: filterMode
-                        flat: true
-                        rightCropped: true
-                        checkable: true
-                        checked: true
-                        iconSource: "qrc:/icons/filter.svg"
-                        onClicked: filterField.forceActiveFocus()
-                    }
-
-                    Controls.Button {
-                        id: addMode
-                        flat: true
-                        leftCropped: true
-                        checkable: true
-                        iconSource: "qrc:/icons/plus.svg"
-                        onClicked: nameField.forceActiveFocus()
-                    }
-                }
-
                 Controls.FilterField {
                     id: filterField
                     flat: true
                     placeholderText: qsTr("Filter routes")
-                    visible: filterMode.checked
-                    onVisibleChanged: clear()
-                    onTextChanged: controller.filter(text)
                     Layout.fillWidth: true
                 }
 
-                Controls.TextField {
-                    id: nameField
+                Controls.MenuButton {
                     flat: true
-                    placeholderText: qsTr("Route filename")
-                    visible: addMode.checked
-                    isValid: text.length > 3 && !controller.routes.includes(text)
-                    Layout.fillWidth: true
-                }
-
-                Controls.Button {
-                    flat: true
-                    enabled: nameField.isValid
-                    visible: addMode.checked
-                    iconSource: "qrc:/icons/ok.svg"
-                    onClicked: {
-                        controller.createRoute(nameField.text);
-                        nameField.clear();
-                    }
+                    iconSource: "qrc:/icons/plus.svg"
+                    model: controller.routeTypes
+                    textRole: "name"
+                    onTriggered: controller.createRoute(modelData)
                 }
             }
 
@@ -95,6 +54,7 @@ Controls.Button {
                 emptyText: qsTr("No routes")
                 delegate: Route {
                     width: parent.width
+                    visible: route.name && route.name.includes(filterField.text)
                     route: modelData
                 }
                 Layout.fillWidth: true
