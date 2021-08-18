@@ -3,7 +3,7 @@
 
 #include <QJsonArray>
 
-#include "i_routes_repository.h"
+#include "i_json_repository.h"
 
 namespace vegur::endpoint
 {
@@ -29,8 +29,8 @@ signals:
     void routeTypesChanged();
 
 private:
-    domain::IRoutesRepository* const m_routes;
-    domain::IRoutesRepository* const m_routeTypes;
+    kjarni::domain::IJsonRepository* const m_routes;
+    kjarni::domain::IJsonRepository* const m_routeTypes;
 };
 } // namespace vegur::endpoint
 
