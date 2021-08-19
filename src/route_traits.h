@@ -3,7 +3,7 @@
 
 namespace vegur::domain
 {
-namespace rote_params
+namespace route_params
 {
 constexpr char name[] = "name";
 constexpr char type[] = "type";

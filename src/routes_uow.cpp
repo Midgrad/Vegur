@@ -1,5 +1,8 @@
 #include "routes_uow.h"
 
+#include <QJsonArray>
+
+#include "route_traits.h"
 #include "utils.h"
 
 using namespace kjarni::domain;
@@ -34,9 +37,9 @@ QJsonObject RoutesUow::route(const QString& routeId) const
     return m_routes.value(routeId);
 }
 
-QJsonObject RoutesUow::routeType(const QString& routeId) const
+QJsonObject RoutesUow::routeType(const QString& typeId) const
 {
-    return m_routeTypes.value(routeId);
+    return m_routeTypes.value(typeId);
 }
 
 void RoutesUow::updateRoutes()
@@ -52,7 +55,8 @@ void RoutesUow::updateRouteTypes()
 {
     for (const QString& typeId : m_routeTypesRepository->selectIds())
     {
-        m_routeTypes[typeId] = m_routeTypesRepository->read(typeId);
+        QJsonObject routeType = m_routeTypesRepository->read(typeId);
+        m_routeTypes[typeId] = routeType;
     }
     emit routeTypesChanged();
 }
@@ -74,11 +78,13 @@ void RoutesUow::removeRoute(const QString& routeId)
     m_routesRepository->remove(routeId);
 }
 
-void RoutesUow::createRoute(const QString& templateId)
+void RoutesUow::createRoute(const QJsonObject& type)
 {
     QJsonObject route;
-    route.insert(json_params::name, kjarni::utils::nameFromType(templateId, this->routeNames()));
-    //route.insert(rote_params::type, type.value(::json_params::id));
+    route.insert(json_params::name,
+                 kjarni::utils::nameFromType(type.value(json_params::name).toString(),
+                                             this->routeNames()));
+    route.insert(route_params::type, type);
     // TODO: route builder
 
     m_routesRepository->save(route);

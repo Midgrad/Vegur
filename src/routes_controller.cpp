@@ -24,7 +24,7 @@ RoutesController::RoutesController(QObject* parent) :
 
     connect(&m_uow, &domain::RoutesUow::routesChanged, this, &RoutesController::routesChanged);
     connect(&m_uow, &domain::RoutesUow::routeTypesChanged, this,
-            &RoutesController::routeTemplatesChanged);
+            &RoutesController::routeTypesChanged);
 }
 
 QJsonArray RoutesController::routes() const
@@ -37,22 +37,19 @@ QJsonArray RoutesController::routes() const
     return routes;
 }
 
-QStringList RoutesController::routeTemplates() const
+QJsonArray RoutesController::routeTypes() const
 {
-    QStringList routeTemplates;
+    QJsonArray routeTypes;
     for (const QJsonObject& routeType : m_uow.routeTypes())
     {
-        for (const QJsonValue& routeTemplate : routeType.value(rote_params::templates).toArray())
-        {
-            routeTemplates.append(routeTemplate.toObject().value(json_params::name).toString());
-        }
+        routeTypes.append(routeType);
     }
-    return routeTemplates;
+    return routeTypes;
 }
 
-void RoutesController::createRoute(const QString& templateId)
+void RoutesController::createRoute(const QJsonObject& type)
 {
-    m_uow.createRoute(templateId);
+    m_uow.createRoute(type);
 }
 
 void RoutesController::removeRoute(const QString& routeId)

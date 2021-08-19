@@ -1,4 +1,5 @@
 {
+    "name": "Common route",
     "id": "route_type_common",
     "waypoint_types:": [
     {
@@ -20,23 +21,18 @@
         ]
     }
     ],
-    "templates": [
+    "template": [
     {
-        "name": "Common route",
-        "waypoints:": [
+        "name": "Start",
+        "type": "waypoint",
+        "params": [
         {
-            "name": "Start",
-            "type": "waypoint",
-            "params": [
-            {
-                "id": "coordinate",
-                "value": "$CENTER_COORDINATE"
-            },
-            {
-                "id": "altitude",
-                "value": "$CENTER_ALTITUDE"
-            }
-        ]
+            "id": "coordinate",
+            "value": "$CENTER_COORDINATE"
+        },
+        {
+            "id": "altitude",
+            "value": "$CENTER_ALTITUDE"
         }
         ]
     }

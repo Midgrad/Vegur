@@ -13,22 +13,22 @@ class RoutesController : public QObject
     Q_OBJECT
 
     Q_PROPERTY(QJsonArray routes READ routes NOTIFY routesChanged)
-    Q_PROPERTY(QStringList routeTemplates READ routeTemplates NOTIFY routeTemplatesChanged)
+    Q_PROPERTY(QJsonArray routeTypes READ routeTypes NOTIFY routeTypesChanged)
 
 public:
     explicit RoutesController(QObject* parent = nullptr);
 
     QJsonArray routes() const;
-    QStringList routeTemplates() const;
+    QJsonArray routeTypes() const;
 
 public slots:
-    void createRoute(const QString& templateId);
+    void createRoute(const QJsonObject& type);
     void removeRoute(const QString& routeId);
     void renameRoute(const QString& routeId, const QString& name);
 
 signals:
     void routesChanged();
-    void routeTemplatesChanged();
+    void routeTypesChanged();
 
 private:
     domain::RoutesUow m_uow;

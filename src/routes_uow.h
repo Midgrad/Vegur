@@ -18,7 +18,7 @@ public:
     QList<QJsonObject> routeTypes() const;
 
     QJsonObject route(const QString& routeId) const;
-    QJsonObject routeType(const QString& routeId) const;
+    QJsonObject routeType(const QString& typeId) const;
 
 public slots:
     void updateRoutes();
@@ -26,7 +26,7 @@ public slots:
 
     void saveRoute(const QJsonObject& routeData);
     void removeRoute(const QString& routeId);
-    void createRoute(const QString& templateId);
+    void createRoute(const QJsonObject& type);
     void renameRoute(const QString& routeId, const QString& name);
 
 signals:
