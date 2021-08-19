@@ -23,6 +23,7 @@ public:
 public slots:
     void createRoute(const QJsonObject& type);
     void removeRoute(const QString& routeId);
+    void renameRoute(const QString& routeId, const QString& name);
 
 signals:
     void routesChanged();

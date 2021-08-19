@@ -3,15 +3,43 @@ import QtQuick.Layouts 1.12
 import Industrial.Controls 1.0 as Controls
 
 RowLayout {
-    id: row
+    id: root
 
     property var route
-    property bool yesNo: false
 
     spacing: 0
+    state: "idle"
+    states: [
+        State { name: "idle" },
+        State { name: "remove" },
+        State { name: "rename" }
+    ]
 
     Controls.Label {
         text: route.name
+        visible: root.state != "rename"
+        Layout.fillWidth: true
+
+        MouseArea {
+            anchors.fill: parent
+            onDoubleClicked: root.state = "rename"
+        }
+    }
+
+    Controls.TextField {
+        visible: root.state == "rename"
+        onVisibleChanged: {
+            if (!visible) return;
+
+            text = route.name;
+            forceActiveFocus();
+            selectAll();
+        }
+        onHighlightedChanged: if (!highlighted) root.state = "idle"
+        onEditingFinished: {
+            controller.renameRoute(route.id, text);
+            root.state = "idle";
+        }
         Layout.fillWidth: true
     }
 
@@ -31,16 +59,16 @@ RowLayout {
     Controls.Button {
         flat: true
         leftCropped: true
-        visible: !yesNo
+        visible: root.state != "remove"
         iconSource: "qrc:/icons/remove.svg"
-        onClicked: yesNo = true
+        onClicked: root.state = "remove"
     }
 
     Controls.Button {
         flat: true
         leftCropped: true
         rightCropped: true
-        visible: yesNo
+        visible: root.state == "remove"
         type: Controls.Theme.Negative
         iconSource: "qrc:/icons/remove.svg"
         onClicked: controller.removeRoute(route.id)
@@ -49,9 +77,9 @@ RowLayout {
     Controls.Button {
         flat: true
         leftCropped: true
-        visible: yesNo
+        visible: root.state == "remove"
         type: Controls.Theme.Secondary
         iconSource: "qrc:/icons/cancel.svg"
-        onClicked: yesNo = false
+        onClicked: root.state = "idle"
     }
 }

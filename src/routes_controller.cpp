@@ -72,3 +72,16 @@ void RoutesController::removeRoute(const QString& routeId)
 {
     m_routes->remove(routeId);
 }
+
+void RoutesController::renameRoute(const QString& routeId, const QString& name)
+{
+    QJsonObject route = m_routes->value(routeId);
+
+    if (route.isEmpty() || route.value(kjarni::domain::json_params::name).toString() == name)
+        return;
+
+    m_routes->remove(routeId);
+
+    route[kjarni::domain::json_params::name] = name;
+    m_routes->save(route);
+}

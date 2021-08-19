@@ -54,6 +54,7 @@ Controls.Button {
                 emptyText: qsTr("No routes")
                 delegate: Route {
                     width: parent.width
+                    height: visible ? implicitHeight : 0
                     visible: route.name && route.name.includes(filterField.text)
                     route: modelData
                 }
