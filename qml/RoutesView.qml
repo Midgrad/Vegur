@@ -42,7 +42,7 @@ Controls.Button {
                 Controls.MenuButton {
                     flat: true
                     iconSource: "qrc:/icons/plus.svg"
-                    model: controller.routeTypes
+                    model: controller.routeTemplates
                     textRole: "name"
                     onTriggered: controller.createRoute(modelData)
                 }

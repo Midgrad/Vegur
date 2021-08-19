@@ -7,6 +7,7 @@ namespace rote_params
 {
 constexpr char name[] = "name";
 constexpr char type[] = "type";
+constexpr char templates[] = "templates";
 } // namespace rote_params
 } // namespace vegur::domain
 

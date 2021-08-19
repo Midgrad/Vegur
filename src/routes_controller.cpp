@@ -13,17 +13,17 @@ constexpr char routeTypesFolder[] = "./route_types";
 } // namespace
 
 using namespace vegur::domain;
+using namespace kjarni::domain;
 using namespace vegur::endpoint;
 
 RoutesController::RoutesController(QObject* parent) :
     QObject(parent),
-    m_routes(new kjarni::domain::JsonRepositoryFiles(::routesFolder, this)),
-    m_routeTypes(new kjarni::domain::JsonRepositoryFiles(::routeTypesFolder, this))
+    m_routes(new JsonRepositoryFiles(::routesFolder, this)),
+    m_routeTypes(new JsonRepositoryFiles(::routeTypesFolder, this))
 {
-    connect(m_routes, &kjarni::domain::IJsonRepository::itemsChanged, this,
-            &RoutesController::routesChanged);
-    connect(m_routeTypes, &kjarni::domain::IJsonRepository::itemsChanged, this,
-            &RoutesController::routeTypesChanged);
+    connect(m_routes, &IJsonRepository::itemsChanged, this, &RoutesController::routesChanged);
+    connect(m_routeTypes, &IJsonRepository::itemsChanged, this,
+            &RoutesController::routeTemplatesChanged);
 }
 
 QJsonArray RoutesController::routes() const
@@ -37,32 +37,30 @@ QJsonArray RoutesController::routes() const
     return routes;
 }
 
-QJsonArray RoutesController::routeTypes() const
+QStringList RoutesController::routeTemplates() const
 {
-    QJsonArray routeTypes;
-
-    for (const QJsonObject& route : m_routeTypes->values())
+    QStringList routeTemplates;
+    for (const QJsonObject& routeType : m_routeTypes->values())
     {
-        routeTypes.append(route);
+        for (const QJsonValue& routeTemplate : routeType.value(rote_params::templates).toArray())
+        {
+            routeTemplates.append(routeTemplate.toObject().value(json_params::name).toString());
+        }
     }
-    return routeTypes;
+    return routeTemplates;
 }
 
-void RoutesController::createRoute(const QJsonObject& type)
+void RoutesController::createRoute(const QString& typeName)
 {
-    QString typeName = type.value(kjarni::domain::json_params::name).toString();
-    if (typeName.isEmpty())
-        return;
-
     QStringList names;
     for (const QJsonObject& route : m_routes->values())
     {
-        names.append(route.value(kjarni::domain::json_params::name).toString());
+        names.append(route.value(json_params::name).toString());
     }
 
     QJsonObject route;
-    route.insert(kjarni::domain::json_params::name, kjarni::utils::nameFromType(typeName, names));
-    route.insert(rote_params::type, type.value(kjarni::domain::json_params::id));
+    route.insert(json_params::name, kjarni::utils::nameFromType(typeName, names));
+    //route.insert(rote_params::type, type.value(::json_params::id));
     // TODO: route builder
 
     m_routes->save(route);
@@ -77,11 +75,11 @@ void RoutesController::renameRoute(const QString& routeId, const QString& name)
 {
     QJsonObject route = m_routes->value(routeId);
 
-    if (route.isEmpty() || route.value(kjarni::domain::json_params::name).toString() == name)
+    if (route.isEmpty() || route.value(json_params::name).toString() == name)
         return;
 
     m_routes->remove(routeId);
 
-    route[kjarni::domain::json_params::name] = name;
+    route[json_params::name] = name;
     m_routes->save(route);
 }

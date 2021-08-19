@@ -1,20 +1,44 @@
 {
-    "name": "Common route",
+    "id": "route_type_common",
     "waypoint_types:": [
+    {
+        "id": "waypoint",
+        "name": "Waypoint",
+        "params": [
         {
-            "name": "Waypoint",
-            "params": [
-                {
-                    "name": "Coordinate",
-                    "type": "coordinate",
-                    "default_value": "0.0:0.0"
-                },
-                {
-                    "name": "Altitude",
-                    "type": "real",
-                    "default_value": 0.0
-                }
-            ]
+            "id": "coordinate",
+            "name": "Coordinate",
+            "type": "coordinate",
+            "default_value": "0.0:0.0"
+        },
+        {
+            "id": "altitude",
+            "name": "Altitude",
+            "type": "real",
+            "default_value": 0.0
         }
+        ]
+    }
+    ],
+    "templates": [
+    {
+        "name": "Common route",
+        "waypoints:": [
+        {
+            "name": "Start",
+            "type": "waypoint",
+            "params": [
+            {
+                "id": "coordinate",
+                "value": "$CENTER_COORDINATE"
+            },
+            {
+                "id": "altitude",
+                "value": "$CENTER_ALTITUDE"
+            }
+        ]
+        }
+        ]
+    }
     ]
 }
