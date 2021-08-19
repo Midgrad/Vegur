@@ -2,8 +2,9 @@
 #define ROUTES_CONTROLLER_H
 
 #include <QJsonArray>
+#include <QMap>
 
-#include "i_json_repository.h"
+#include "routes_uow.h"
 
 namespace vegur::endpoint
 {
@@ -21,7 +22,7 @@ public:
     QStringList routeTemplates() const;
 
 public slots:
-    void createRoute(const QString& typeName);
+    void createRoute(const QString& templateId);
     void removeRoute(const QString& routeId);
     void renameRoute(const QString& routeId, const QString& name);
 
@@ -30,8 +31,7 @@ signals:
     void routeTemplatesChanged();
 
 private:
-    kjarni::domain::IJsonRepository* const m_routes;
-    kjarni::domain::IJsonRepository* const m_routeTypes;
+    domain::RoutesUow m_uow;
 };
 } // namespace vegur::endpoint
 
