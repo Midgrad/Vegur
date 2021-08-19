@@ -2,8 +2,8 @@
 
 #include <QJsonArray>
 
+#include "route_creator.h"
 #include "route_traits.h"
-#include "utils.h"
 
 using namespace kjarni::domain;
 using namespace vegur::domain;
@@ -65,7 +65,7 @@ void RoutesUow::saveRoute(const QJsonObject& routeData)
 {
     QJsonObject data = routeData;
     m_routesRepository->save(data);
-    QString routeId = data.value(json_params::id).toString();
+    QString routeId = data.value(kjarni_params::id).toString();
     if (routeId.isNull())
         return;
 
@@ -80,12 +80,10 @@ void RoutesUow::removeRoute(const QString& routeId)
 
 void RoutesUow::createRoute(const QJsonObject& type)
 {
-    QJsonObject route;
-    route.insert(json_params::name,
-                 kjarni::utils::nameFromType(type.value(json_params::name).toString(),
-                                             this->routeNames()));
-    route.insert(route_params::type, type);
-    // TODO: route builder
+    RouteCreator creator(type, this->routeNames());
+    QJsonObject route = creator.create();
+    if (route.isEmpty())
+        return;
 
     m_routesRepository->save(route);
 }
@@ -94,13 +92,13 @@ void RoutesUow::renameRoute(const QString& routeId, const QString& name)
 {
     QJsonObject route = m_routes.value(routeId);
 
-    if (route.isEmpty() || route.value(json_params::name).toString() == name ||
+    if (route.isEmpty() || route.value(kjarni_params::name).toString() == name ||
         this->routeNames().contains(name))
         return;
 
     this->removeRoute(routeId);
 
-    route[json_params::name] = name;
+    route[kjarni_params::name] = name;
     this->saveRoute(route);
 }
 
@@ -109,7 +107,7 @@ QStringList RoutesUow::routeNames() const
     QStringList names;
     for (const QJsonObject& route : m_routes.values())
     {
-        names.append(route.value(json_params::name).toString());
+        names.append(route.value(kjarni_params::name).toString());
     }
     return names;
 }

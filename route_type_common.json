@@ -10,18 +10,12 @@
             "id": "coordinate",
             "name": "Coordinate",
             "type": "coordinate",
-            "default_value": "0.0:0.0"
-        },
-        {
-            "id": "altitude",
-            "name": "Altitude",
-            "type": "real",
-            "default_value": 0.0
+            "default_value": "0.0:0.0:0.0"
         }
         ]
     }
     ],
-    "template": [
+    "initial": [
     {
         "name": "Start",
         "type": "waypoint",
@@ -29,10 +23,6 @@
         {
             "id": "coordinate",
             "value": "$CENTER_COORDINATE"
-        },
-        {
-            "id": "altitude",
-            "value": "$CENTER_ALTITUDE"
         }
         ]
     }
