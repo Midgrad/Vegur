@@ -24,7 +24,7 @@ public slots:
     void updateRoutes();
     void updateRouteTypes();
 
-    void saveRoute(const QString& routeId, const QJsonObject& routeData);
+    void saveRoute(const QJsonObject& routeData);
     void removeRoute(const QString& routeId);
     void createRoute(const QString& templateId);
     void renameRoute(const QString& routeId, const QString& name);
