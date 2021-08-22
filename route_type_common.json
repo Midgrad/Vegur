@@ -7,7 +7,7 @@
         "name": "Waypoint",
         "params": [
         {
-            "id": "coordinate",
+            "id": "position",
             "name": "Coordinate",
             "type": "coordinate",
             "default_value": "0.0:0.0:0.0"
@@ -21,7 +21,7 @@
         "type": "waypoint",
         "params": [
         {
-            "id": "coordinate",
+            "id": "position",
             "value": "$CENTER_COORDINATE"
         }
         ]
