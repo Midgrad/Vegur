@@ -7,7 +7,10 @@ import Dreka.Vegur 1.0
 Controls.Button {
     id: root
 
-    RoutesController { id: controller }
+    RoutesController {
+        id: controller
+        centerPosition: map.centerPosition
+    }
 
     Component.onCompleted: map.registerController("routesController", controller)
 

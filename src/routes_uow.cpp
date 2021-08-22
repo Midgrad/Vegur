@@ -78,9 +78,12 @@ void RoutesUow::removeRoute(const QString& routeId)
     m_routesRepository->remove(routeId);
 }
 
-void RoutesUow::createRoute(const QJsonObject& type)
+void RoutesUow::createRoute(const QJsonObject& type, const QVariantMap& features)
 {
-    RouteCreator creator(type, this->routeNames());
+    QVariantMap modified(features);
+    modified[route_features::bannedNames] = this->routeNames();
+
+    RouteCreator creator(type, modified);
     QJsonObject route = creator.create();
     if (route.isEmpty())
         return;

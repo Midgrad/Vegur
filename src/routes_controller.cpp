@@ -47,9 +47,18 @@ QJsonArray RoutesController::routeTypes() const
     return routeTypes;
 }
 
+QJsonObject RoutesController::centerPosition() const
+{
+    return m_centerPosition;
+}
+
 void RoutesController::createRoute(const QJsonObject& type)
 {
-    m_uow.createRoute(type);
+    QVariantMap features;
+
+    features[route_features::centerPosition] = m_centerPosition;
+
+    m_uow.createRoute(type, features);
 }
 
 void RoutesController::removeRoute(const QString& routeId)
@@ -60,4 +69,13 @@ void RoutesController::removeRoute(const QString& routeId)
 void RoutesController::renameRoute(const QString& routeId, const QString& name)
 {
     m_uow.renameRoute(routeId, name);
+}
+
+void RoutesController::setCenterPosition(const QJsonObject& newCenterPosition)
+{
+    if (m_centerPosition == newCenterPosition)
+        return;
+
+    m_centerPosition = newCenterPosition;
+    emit centerPositionChanged();
 }

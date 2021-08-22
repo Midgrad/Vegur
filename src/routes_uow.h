@@ -1,7 +1,7 @@
 #ifndef ROUTES_UOW_H
 #define ROUTES_UOW_H
 
-#include <QMap>
+#include <QVariantMap>
 
 #include "i_json_repository.h"
 
@@ -26,7 +26,7 @@ public slots:
 
     void saveRoute(const QJsonObject& routeData);
     void removeRoute(const QString& routeId);
-    void createRoute(const QJsonObject& type);
+    void createRoute(const QJsonObject& type, const QVariantMap& features = QVariantMap());
     void renameRoute(const QString& routeId, const QString& name);
 
 signals:

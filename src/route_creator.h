@@ -2,20 +2,20 @@
 #define ROUTE_CREATOR_H
 
 #include <QJsonObject>
-#include <QStringList>
+#include <QVariantMap>
 
 namespace vegur::domain
 {
 class RouteCreator
 {
 public:
-    RouteCreator(const QJsonObject& type, const QStringList& bannedNames);
+    RouteCreator(const QJsonObject& type, const QVariantMap& features);
 
     QJsonObject create();
 
 private:
     QJsonObject const m_type;
-    QStringList const m_bannedNames;
+    QVariantMap const m_features;
 };
 } // namespace vegur::domain
 
