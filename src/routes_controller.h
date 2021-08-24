@@ -29,7 +29,7 @@ public slots:
     void createRoute(const QJsonObject& type);
     void removeRoute(const QString& routeId);
     void renameRoute(const QString& routeId, const QString& name);
-    void setCenterPosition(const QJsonObject& newCenterPosition);
+    void setCenterPosition(const QJsonObject& centerPosition);
 
 signals:
     void routesChanged();

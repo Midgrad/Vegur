@@ -73,11 +73,8 @@ void RoutesController::renameRoute(const QString& routeId, const QString& name)
     m_uow.renameRoute(routeId, name);
 }
 
-void RoutesController::setCenterPosition(const QJsonObject& newCenterPosition)
+void RoutesController::setCenterPosition(const QJsonObject& centerPosition)
 {
-    if (m_centerPosition == newCenterPosition)
-        return;
-
-    m_centerPosition = newCenterPosition;
+    m_centerPosition = centerPosition;
     emit centerPositionChanged();
 }
