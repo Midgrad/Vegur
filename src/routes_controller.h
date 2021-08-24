@@ -4,6 +4,7 @@
 #include <QJsonArray>
 #include <QMap>
 
+#include "geodetic.h"
 #include "routes_uow.h"
 
 namespace vegur::endpoint
@@ -37,7 +38,7 @@ signals:
 
 private:
     domain::RoutesUow m_uow;
-    QJsonObject m_centerPosition;
+    jord::domain::Geodetic m_centerPosition;
 };
 } // namespace vegur::endpoint
 

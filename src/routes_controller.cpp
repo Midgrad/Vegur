@@ -9,6 +9,7 @@ namespace
 {
 constexpr char routesFolder[] = "./routes";
 constexpr char routeTypesFolder[] = "./route_types";
+constexpr float altitudeOffset = 50.0;
 } // namespace
 
 using namespace vegur::domain;
@@ -49,14 +50,15 @@ QJsonArray RoutesController::routeTypes() const
 
 QJsonObject RoutesController::centerPosition() const
 {
-    return m_centerPosition;
+    return m_centerPosition.toJson();
 }
 
 void RoutesController::createRoute(const QJsonObject& type)
 {
     QVariantMap features;
 
-    features[route_features::centerPosition] = m_centerPosition;
+    features[route_features::centerPosition] = m_centerPosition.offsetted(0, 0, ::altitudeOffset)
+                                                   .toJson();
 
     m_uow.createRoute(type, features);
 }
