@@ -12,9 +12,8 @@ constexpr char routeTypesFolder[] = "./route_types";
 constexpr float altitudeOffset = 50.0;
 } // namespace
 
-using namespace vegur::domain;
-using namespace kjarni::domain;
-using namespace vegur::endpoint;
+using namespace md::domain;
+using namespace md::presentation;
 
 RoutesController::RoutesController(QObject* parent) :
     QObject(parent),
@@ -23,9 +22,8 @@ RoutesController::RoutesController(QObject* parent) :
     m_uow.updateRouteTypes();
     m_uow.updateRoutes();
 
-    connect(&m_uow, &domain::RoutesUow::routesChanged, this, &RoutesController::routesChanged);
-    connect(&m_uow, &domain::RoutesUow::routeTypesChanged, this,
-            &RoutesController::routeTypesChanged);
+    connect(&m_uow, &RoutesUow::routesChanged, this, &RoutesController::routesChanged);
+    connect(&m_uow, &RoutesUow::routeTypesChanged, this, &RoutesController::routeTypesChanged);
 }
 
 QJsonArray RoutesController::routes() const

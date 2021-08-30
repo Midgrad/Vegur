@@ -3,7 +3,7 @@
 
 #include "kjarni_traits.h"
 
-namespace vegur::domain
+namespace md::domain
 {
 namespace route_params
 {
@@ -18,6 +18,6 @@ namespace route_features
 constexpr char bannedNames[] = "bannedNames";
 constexpr char centerPosition[] = "$CENTER_COORDINATE";
 } // namespace route_features
-} // namespace vegur::domain
+} // namespace md::domain
 
 #endif // ROUTE_TRAITS_H

@@ -5,8 +5,7 @@
 #include "route_traits.h"
 #include "utils.h"
 
-using namespace kjarni::domain;
-using namespace vegur::domain;
+using namespace md::domain;
 
 RouteCreator::RouteCreator(const QJsonObject& type, const QVariantMap& features) :
     m_type(type),
@@ -18,9 +17,9 @@ QJsonObject RouteCreator::create()
 {
     QJsonObject route;
     QStringList bannedNames = m_features.value(route_features::bannedNames).toStringList();
-    route[kjarni_params::name] =
-        kjarni::utils::nameFromType(m_type.value(kjarni_params::name).toString(), bannedNames);
-    route[route_params::type] = m_type.value(kjarni_params::id);
+    route[params::name] = md::utils::nameFromType(m_type.value(params::name).toString(),
+                                                  bannedNames);
+    route[route_params::type] = m_type.value(params::id);
 
     // Initial route template
     QJsonArray waypoints;
@@ -31,17 +30,17 @@ QJsonObject RouteCreator::create()
         if (source.isEmpty())
             continue;
 
-        waypoint[kjarni_params::name] = source.value(kjarni_params::name).toString();
+        waypoint[params::name] = source.value(params::name).toString();
         waypoint[route_params::type] = source.value(route_params::type).toString();
 
         // Set deafult params
-        for (const QJsonValue& jsonValue : source.value(kjarni_params::params).toArray())
+        for (const QJsonValue& jsonValue : source.value(params::params).toArray())
         {
             QJsonObject param = jsonValue.toObject();
             if (param.isEmpty())
                 continue;
 
-            QJsonValue value = param.value(kjarni_params::value);
+            QJsonValue value = param.value(params::value);
 
             // Try mask params
             for (const QString& mask : m_features.keys())
@@ -50,7 +49,7 @@ QJsonObject RouteCreator::create()
                     value = QJsonValue::fromVariant(m_features.value(mask));
             }
 
-            waypoint[param.value(kjarni_params::id).toString()] = value;
+            waypoint[param.value(params::id).toString()] = value;
         }
 
         waypoints.append(waypoint);

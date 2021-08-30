@@ -5,8 +5,7 @@
 #include "route_creator.h"
 #include "route_traits.h"
 
-using namespace kjarni::domain;
-using namespace vegur::domain;
+using namespace md::domain;
 
 RoutesUow::RoutesUow(IJsonRepository* routesRepository, IJsonRepository* routeTypesRepository,
                      QObject* parent) :
@@ -65,7 +64,7 @@ void RoutesUow::saveRoute(const QJsonObject& routeData)
 {
     QJsonObject data = routeData;
     m_routesRepository->save(data);
-    QString routeId = data.value(kjarni_params::id).toString();
+    QString routeId = data.value(params::id).toString();
     if (routeId.isNull())
         return;
 
@@ -95,13 +94,13 @@ void RoutesUow::renameRoute(const QString& routeId, const QString& name)
 {
     QJsonObject route = m_routes.value(routeId);
 
-    if (route.isEmpty() || route.value(kjarni_params::name).toString() == name ||
+    if (route.isEmpty() || route.value(params::name).toString() == name ||
         this->routeNames().contains(name))
         return;
 
     this->removeRoute(routeId);
 
-    route[kjarni_params::name] = name;
+    route[params::name] = name;
     this->saveRoute(route);
 }
 
@@ -110,7 +109,7 @@ QStringList RoutesUow::routeNames() const
     QStringList names;
     for (const QJsonObject& route : m_routes.values())
     {
-        names.append(route.value(kjarni_params::name).toString());
+        names.append(route.value(params::name).toString());
     }
     return names;
 }

@@ -3,14 +3,14 @@
 
 #include "i_module.h"
 
-namespace vegur::app
+namespace md::app
 {
 class ModuleVegur
     : public QObject
-    , public kjarni::app::IModule
+    , public md::app::IModule
 {
     Q_OBJECT
-    Q_INTERFACES(kjarni::app::IModule)
+    Q_INTERFACES(md::app::IModule)
     Q_PLUGIN_METADATA(IID "Midgrad.ModuleVegur" FILE "meta.json")
 
 public:

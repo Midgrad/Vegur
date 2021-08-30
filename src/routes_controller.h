@@ -7,7 +7,7 @@
 #include "geodetic.h"
 #include "routes_uow.h"
 
-namespace vegur::endpoint
+namespace md::presentation
 {
 class RoutesController : public QObject
 {
@@ -38,8 +38,8 @@ signals:
 
 private:
     domain::RoutesUow m_uow;
-    jord::domain::Geodetic m_centerPosition;
+    md::domain::Geodetic m_centerPosition;
 };
-} // namespace vegur::endpoint
+} // namespace md::presentation
 
 #endif // ROUTES_CONTROLLER_H

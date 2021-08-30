@@ -4,7 +4,7 @@
 #include <QJsonObject>
 #include <QVariantMap>
 
-namespace vegur::domain
+namespace md::domain
 {
 class RouteCreator
 {

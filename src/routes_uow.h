@@ -5,14 +5,14 @@
 
 #include "i_json_repository.h"
 
-namespace vegur::domain
+namespace md::domain
 {
 class RoutesUow : public QObject
 {
     Q_OBJECT
 public:
-    RoutesUow(kjarni::domain::IJsonRepository* routesRepository,
-              kjarni::domain::IJsonRepository* routeTypesRepository, QObject* parent = nullptr);
+    RoutesUow(IJsonRepository* routesRepository, IJsonRepository* routeTypesRepository,
+              QObject* parent = nullptr);
 
     QList<QJsonObject> routes() const;
     QList<QJsonObject> routeTypes() const;
@@ -36,12 +36,12 @@ signals:
 private:
     QStringList routeNames() const;
 
-    kjarni::domain::IJsonRepository* const m_routesRepository;
-    kjarni::domain::IJsonRepository* const m_routeTypesRepository;
+    IJsonRepository* const m_routesRepository;
+    IJsonRepository* const m_routeTypesRepository;
 
     QMap<QString, QJsonObject> m_routes;
     QMap<QString, QJsonObject> m_routeTypes;
 };
-} // namespace vegur::domain
+} // namespace md::domain
 
 #endif // ROUTES_UOW_H
