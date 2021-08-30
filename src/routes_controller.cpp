@@ -17,7 +17,8 @@ using namespace md::presentation;
 
 RoutesController::RoutesController(QObject* parent) :
     QObject(parent),
-    m_uow(new JsonRepositoryFiles(::routesFolder), new JsonRepositoryFiles(::routeTypesFolder), this)
+    m_uow(new data_source::JsonRepositoryFiles(::routesFolder),
+          new data_source::JsonRepositoryFiles(::routeTypesFolder), this)
 {
     m_uow.updateRouteTypes();
     m_uow.updateRoutes();

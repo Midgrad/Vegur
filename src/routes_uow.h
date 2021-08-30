@@ -11,8 +11,8 @@ class RoutesUow : public QObject
 {
     Q_OBJECT
 public:
-    RoutesUow(IJsonRepository* routesRepository, IJsonRepository* routeTypesRepository,
-              QObject* parent = nullptr);
+    RoutesUow(data_source::IJsonRepository* routesRepository,
+              data_source::IJsonRepository* routeTypesRepository, QObject* parent = nullptr);
 
     QList<QJsonObject> routes() const;
     QList<QJsonObject> routeTypes() const;
@@ -36,8 +36,8 @@ signals:
 private:
     QStringList routeNames() const;
 
-    IJsonRepository* const m_routesRepository;
-    IJsonRepository* const m_routeTypesRepository;
+    data_source::IJsonRepository* const m_routesRepository;
+    data_source::IJsonRepository* const m_routeTypesRepository;
 
     QMap<QString, QJsonObject> m_routes;
     QMap<QString, QJsonObject> m_routeTypes;

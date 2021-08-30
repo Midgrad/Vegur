@@ -7,8 +7,8 @@
 
 using namespace md::domain;
 
-RoutesUow::RoutesUow(IJsonRepository* routesRepository, IJsonRepository* routeTypesRepository,
-                     QObject* parent) :
+RoutesUow::RoutesUow(data_source::IJsonRepository* routesRepository,
+                     data_source::IJsonRepository* routeTypesRepository, QObject* parent) :
     QObject(parent),
     m_routesRepository(routesRepository),
     m_routeTypesRepository(routeTypesRepository)
@@ -16,8 +16,9 @@ RoutesUow::RoutesUow(IJsonRepository* routesRepository, IJsonRepository* routeTy
     m_routesRepository->setParent(this);
     m_routeTypesRepository->setParent(this);
 
-    connect(m_routesRepository, &IJsonRepository::itemsChanged, this, &RoutesUow::updateRoutes);
-    connect(m_routeTypesRepository, &IJsonRepository::itemsChanged, this,
+    connect(m_routesRepository, &data_source::IJsonRepository::itemsChanged, this,
+            &RoutesUow::updateRoutes);
+    connect(m_routeTypesRepository, &data_source::IJsonRepository::itemsChanged, this,
             &RoutesUow::updateRouteTypes);
 }
 
