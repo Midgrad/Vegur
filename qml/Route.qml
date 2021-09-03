@@ -47,6 +47,7 @@ RowLayout {
         flat: true
         rightCropped: true
         iconSource: "qrc:/icons/center.svg"
+        onClicked: controller.centerRoute(route.id)
     }
 
     Controls.Button {
