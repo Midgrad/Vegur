@@ -54,7 +54,9 @@ RowLayout {
         flat: true
         leftCropped: true
         rightCropped: true
-        iconSource: "qrc:/icons/password_hide.svg"
+        tipText: route.visible ? qsTr("Hide route") : qsTr("Show route")
+        iconSource: route.visible ? "qrc:/icons/password_show.svg" : "qrc:/icons/password_hide.svg"
+        onClicked: controller.modifyRoute(route.id, "visible", !route.visible)
     }
 
     Controls.Button {

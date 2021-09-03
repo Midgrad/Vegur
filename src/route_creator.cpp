@@ -20,6 +20,7 @@ QJsonObject RouteCreator::create()
     route[params::name] = md::utils::nameFromType(m_type.value(params::name).toString(),
                                                   bannedNames);
     route[route_params::type] = m_type.value(params::id);
+    route[route_params::visible] = true;
 
     // Initial route template
     QJsonArray waypoints;

@@ -9,6 +9,7 @@ namespace route_params
 {
 constexpr char name[] = "name";
 constexpr char type[] = "type";
+constexpr char visible[] = "visible";
 constexpr char initial[] = "initial";
 constexpr char waypoints[] = "waypoints";
 } // namespace route_params

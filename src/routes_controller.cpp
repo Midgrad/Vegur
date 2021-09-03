@@ -9,7 +9,6 @@ namespace
 {
 constexpr char routesFolder[] = "./routes";
 constexpr char routeTypesFolder[] = "./route_types";
-constexpr float altitudeOffset = 50.0;
 } // namespace
 
 using namespace md::domain;
@@ -56,8 +55,7 @@ void RoutesController::createRoute(const QJsonObject& type)
 {
     QVariantMap features;
 
-    features[route_features::centerPosition] = m_centerPosition.offsetted(0, 0, ::altitudeOffset)
-                                                   .toJson();
+    features[route_features::centerPosition] = m_centerPosition.toJson();
 
     m_uow.createRoute(type, features);
 }
@@ -70,6 +68,19 @@ void RoutesController::removeRoute(const QString& routeId)
 void RoutesController::renameRoute(const QString& routeId, const QString& name)
 {
     m_uow.renameRoute(routeId, name);
+}
+
+void RoutesController::modifyRoute(const QString& routeId, const QString& param,
+                                   const QVariant& value)
+{
+    QJsonObject route = m_uow.route(routeId);
+    if (route.isEmpty())
+        return;
+
+    route[param] = QJsonValue::fromVariant(value);
+
+    m_uow.saveRoute(route);
+    emit routesChanged();
 }
 
 void RoutesController::setCenterPosition(const QJsonObject& centerPosition)
