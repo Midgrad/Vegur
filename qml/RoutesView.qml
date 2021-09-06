@@ -23,7 +23,7 @@ Controls.Button {
         id: popup
 
         closePolicy: Controls.Popup.CloseOnPressOutsideParent
-        width: Controls.Theme.baseSize * 10
+        width: Controls.Theme.baseSize * 15
         height: Math.min(implicitHeight, main.availableHeight)
         y: root.height + Controls.Theme.margins
         x: -root.parent.x

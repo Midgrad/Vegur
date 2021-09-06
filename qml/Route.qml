@@ -49,6 +49,17 @@ RowLayout {
         Layout.fillWidth: true
     }
 
+    Controls.ComboBox {
+        id: vehiclesBox
+        flat: true
+        model: controller.vehicles
+        Binding on currentIndex {
+            value: controller.vehicles.indexOf(route.vehicle ? route.vehicle : "")
+            when: !vehiclesBox.activeFocus
+        }
+        onActivated: controller.assignRoute(routeId, modelData[index])
+    }
+
     Controls.Button {
         flat: true
         rightCropped: true

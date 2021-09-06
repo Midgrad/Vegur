@@ -3,6 +3,7 @@
 #include <QDebug>
 
 #include "json_repository_files.h"
+#include "locator.h"
 #include "route_traits.h"
 
 namespace
@@ -16,9 +17,14 @@ using namespace md::presentation;
 
 RoutesController::RoutesController(QObject* parent) :
     QObject(parent),
+    m_pTree(md::app::Locator::get<IPropertyTree>()),
     m_uow(new data_source::JsonRepositoryFiles(::routesFolder),
           new data_source::JsonRepositoryFiles(::routeTypesFolder), this)
 {
+    Q_ASSERT(m_pTree);
+
+    connect(m_pTree, &IPropertyTree::rootNodesChanged, this, &RoutesController::vehiclesChanged);
+
     m_uow.updateRouteTypes();
     m_uow.updateRoutes();
 
@@ -35,6 +41,14 @@ QStringList RoutesController::routes() const
 QStringList RoutesController::routeTypes() const
 {
     return m_uow.routeTypeIds();
+}
+
+QStringList RoutesController::vehicles() const
+{
+    // TODO: vehicles only
+    QStringList result = m_pTree->rootNodes();
+    result.prepend(QString());
+    return result;
 }
 
 QJsonObject RoutesController::centerPosition() const
@@ -81,6 +95,11 @@ void RoutesController::modifyRoute(const QString& routeId, const QString& param,
     route[param] = QJsonValue::fromVariant(value);
 
     m_uow.saveRoute(routeId, route);
+}
+
+void RoutesController::assignRoute(const QString& routeId, const QString& vehicleId)
+{
+    this->modifyRoute(routeId, "vehicle", vehicleId);
 }
 
 void RoutesController::setCenterPosition(const QJsonObject& centerPosition)
