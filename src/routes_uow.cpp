@@ -101,9 +101,14 @@ void RoutesUow::updateRouteTypes()
     emit routeTypesChanged();
 }
 
-void RoutesUow::saveRoute(const QJsonObject& routeData)
+void RoutesUow::saveRoute(const QString& routeId, const QJsonObject& routeData)
 {
+    if (m_routes.value(routeId) == routeData)
+        return;
+
     m_routesRepository->save(routeData);
+    m_routes[routeId] = routeData;
+    emit routeChanged(routeId);
 }
 
 void RoutesUow::removeRoute(const QString& routeId)
@@ -139,7 +144,7 @@ void RoutesUow::renameRoute(const QString& routeId, const QString& name)
     this->removeRoute(routeId);
 
     route[params::name] = name;
-    this->saveRoute(route);
+    this->saveRoute(routeId, route);
 }
 
 QStringList RoutesUow::routeNames() const

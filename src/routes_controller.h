@@ -25,9 +25,7 @@ public:
     QStringList routeTypes() const;
     QJsonObject centerPosition() const;
 
-    // FIXME: returns boolshit
-    Q_INVOKABLE QVariantMap routeData(const QString& routeId) const;
-    //Q_INVOKABLE QJsonObject routeData(const QString& routeId) const;
+    Q_INVOKABLE QJsonObject routeData(const QString& routeId) const;
     Q_INVOKABLE QJsonObject routeTypeData(const QString& typeId) const;
 
 public slots:

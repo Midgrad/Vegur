@@ -42,9 +42,9 @@ QJsonObject RoutesController::centerPosition() const
     return m_centerPosition.toJson();
 }
 
-QVariantMap RoutesController::routeData(const QString& routeId) const
+QJsonObject RoutesController::routeData(const QString& routeId) const
 {
-    return m_uow.route(routeId).toVariantMap();
+    return m_uow.route(routeId);
 }
 
 QJsonObject RoutesController::routeTypeData(const QString& typeId) const
@@ -80,7 +80,7 @@ void RoutesController::modifyRoute(const QString& routeId, const QString& param,
 
     route[param] = QJsonValue::fromVariant(value);
 
-    m_uow.saveRoute(route);
+    m_uow.saveRoute(routeId, route);
 }
 
 void RoutesController::setCenterPosition(const QJsonObject& centerPosition)
