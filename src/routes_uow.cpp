@@ -1,5 +1,6 @@
 #include "routes_uow.h"
 
+#include <QDebug>
 #include <QJsonArray>
 
 #include "route_creator.h"
@@ -22,9 +23,19 @@ RoutesUow::RoutesUow(data_source::IJsonRepository* routesRepository,
             &RoutesUow::updateRouteTypes);
 }
 
+QStringList RoutesUow::routeIds() const
+{
+    return m_routes.keys();
+}
+
 QList<QJsonObject> RoutesUow::routes() const
 {
     return m_routes.values();
+}
+
+QStringList RoutesUow::routeTypeIds() const
+{
+    return m_routeTypes.keys();
 }
 
 QList<QJsonObject> RoutesUow::routeTypes() const
@@ -44,11 +55,40 @@ QJsonObject RoutesUow::routeType(const QString& typeId) const
 
 void RoutesUow::updateRoutes()
 {
+    bool changed = false;
+    QStringList oldIds = this->routeIds();
+
     for (const QString& routeId : m_routesRepository->selectIds())
     {
-        m_routes[routeId] = m_routesRepository->read(routeId);
+        QJsonObject newRoute = m_routesRepository->read(routeId);
+        // Update existing routes
+        if (oldIds.contains(routeId))
+        {
+            if (m_routes.value(routeId) != newRoute)
+            {
+                m_routes[routeId] = newRoute;
+                emit routeChanged(routeId);
+            }
+            // Don't distub unchanged routes
+            oldIds.removeOne(routeId);
+        }
+        // Insert new route
+        else
+        {
+            m_routes.insert(routeId, newRoute);
+            changed = true;
+        }
     }
-    emit routesChanged();
+
+    // Remove rotten routes
+    for (const QString& routeId : oldIds)
+    {
+        m_routes.remove(routeId);
+        changed = true;
+    }
+
+    if (changed)
+        emit routesChanged();
 }
 
 void RoutesUow::updateRouteTypes()
@@ -63,23 +103,20 @@ void RoutesUow::updateRouteTypes()
 
 void RoutesUow::saveRoute(const QJsonObject& routeData)
 {
-    QJsonObject data = routeData;
-    m_routesRepository->save(data);
-    QString routeId = data.value(params::id).toString();
-    if (routeId.isNull())
-        return;
-
-    m_routes[routeId] = data;
+    m_routesRepository->save(routeData);
 }
 
 void RoutesUow::removeRoute(const QString& routeId)
 {
-    m_routes.remove(routeId);
     m_routesRepository->remove(routeId);
 }
 
-void RoutesUow::createRoute(const QJsonObject& type, const QVariantMap& features)
+void RoutesUow::createRoute(const QString& typeId, const QVariantMap& features)
 {
+    QJsonObject type = this->routeType(typeId);
+    if (type.isEmpty())
+        return;
+
     QVariantMap modified(features);
     modified[route_features::bannedNames] = this->routeNames();
 

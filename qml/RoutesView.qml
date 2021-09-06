@@ -47,7 +47,7 @@ Controls.Button {
                     iconSource: "qrc:/icons/plus.svg"
                     model: controller.routeTypes
                     delegate: Controls.MenuItem {
-                        text: modelData.name
+                        text: controller.routeTypeData(modelData).name
                         onTriggered: controller.createRoute(modelData)
                     }
                 }
@@ -61,7 +61,7 @@ Controls.Button {
                     width: parent.width
                     height: visible ? implicitHeight : 0
                     visible: route.name && route.name.includes(filterField.text)
-                    route: modelData
+                    routeId: modelData
                 }
                 Layout.fillWidth: true
                 Layout.fillHeight: true

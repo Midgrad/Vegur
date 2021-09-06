@@ -5,7 +5,13 @@ import Industrial.Controls 1.0 as Controls
 RowLayout {
     id: root
 
-    property var route
+    property string routeId
+    property var route: controller.routeData(routeId)
+
+    Connections {
+        target: controller
+        onRouteChanged: if (routeId == root.routeId) route = controller.routeData(routeId)
+    }
 
     spacing: 0
     state: "idle"
@@ -37,7 +43,7 @@ RowLayout {
         }
         onHighlightedChanged: if (!highlighted) root.state = "idle"
         onEditingFinished: {
-            controller.renameRoute(route.id, text);
+            controller.renameRoute(routeId, text);
             root.state = "idle";
         }
         Layout.fillWidth: true
@@ -47,7 +53,7 @@ RowLayout {
         flat: true
         rightCropped: true
         iconSource: "qrc:/icons/center.svg"
-        onClicked: controller.centerRoute(route.id)
+        onClicked: controller.centerRoute(routeId)
     }
 
     Controls.Button {
@@ -56,7 +62,7 @@ RowLayout {
         rightCropped: true
         tipText: route.visible ? qsTr("Hide route") : qsTr("Show route")
         iconSource: route.visible ? "qrc:/icons/password_show.svg" : "qrc:/icons/password_hide.svg"
-        onClicked: controller.modifyRoute(route.id, "visible", !route.visible)
+        onClicked: controller.modifyRoute(routeId, "visible", !route.visible)
     }
 
     Controls.Button {
@@ -74,7 +80,7 @@ RowLayout {
         visible: root.state == "remove"
         type: Controls.Theme.Negative
         iconSource: "qrc:/icons/remove.svg"
-        onClicked: controller.removeRoute(route.id)
+        onClicked: controller.removeRoute(routeId)
     }
 
     Controls.Button {

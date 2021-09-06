@@ -22,28 +22,19 @@ RoutesController::RoutesController(QObject* parent) :
     m_uow.updateRouteTypes();
     m_uow.updateRoutes();
 
+    connect(&m_uow, &RoutesUow::routeChanged, this, &RoutesController::routeChanged);
     connect(&m_uow, &RoutesUow::routesChanged, this, &RoutesController::routesChanged);
     connect(&m_uow, &RoutesUow::routeTypesChanged, this, &RoutesController::routeTypesChanged);
 }
 
-QJsonArray RoutesController::routes() const
+QStringList RoutesController::routes() const
 {
-    QJsonArray routes;
-    for (const QJsonObject& route : m_uow.routes())
-    {
-        routes.append(route);
-    }
-    return routes;
+    return m_uow.routeIds();
 }
 
-QJsonArray RoutesController::routeTypes() const
+QStringList RoutesController::routeTypes() const
 {
-    QJsonArray routeTypes;
-    for (const QJsonObject& routeType : m_uow.routeTypes())
-    {
-        routeTypes.append(routeType);
-    }
-    return routeTypes;
+    return m_uow.routeTypeIds();
 }
 
 QJsonObject RoutesController::centerPosition() const
@@ -51,13 +42,23 @@ QJsonObject RoutesController::centerPosition() const
     return m_centerPosition.toJson();
 }
 
-void RoutesController::createRoute(const QJsonObject& type)
+QVariantMap RoutesController::routeData(const QString& routeId) const
+{
+    return m_uow.route(routeId).toVariantMap();
+}
+
+QJsonObject RoutesController::routeTypeData(const QString& typeId) const
+{
+    return m_uow.routeType(typeId);
+}
+
+void RoutesController::createRoute(const QString& typeId)
 {
     QVariantMap features;
 
     features[route_features::centerPosition] = m_centerPosition.toJson();
 
-    m_uow.createRoute(type, features);
+    m_uow.createRoute(typeId, features);
 }
 
 void RoutesController::removeRoute(const QString& routeId)
@@ -80,7 +81,6 @@ void RoutesController::modifyRoute(const QString& routeId, const QString& param,
     route[param] = QJsonValue::fromVariant(value);
 
     m_uow.saveRoute(route);
-    emit routesChanged();
 }
 
 void RoutesController::setCenterPosition(const QJsonObject& centerPosition)

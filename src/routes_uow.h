@@ -14,7 +14,9 @@ public:
     RoutesUow(data_source::IJsonRepository* routesRepository,
               data_source::IJsonRepository* routeTypesRepository, QObject* parent = nullptr);
 
+    QStringList routeIds() const;
     QList<QJsonObject> routes() const;
+    QStringList routeTypeIds() const;
     QList<QJsonObject> routeTypes() const;
 
     QJsonObject route(const QString& routeId) const;
@@ -26,10 +28,11 @@ public slots:
 
     void saveRoute(const QJsonObject& routeData);
     void removeRoute(const QString& routeId);
-    void createRoute(const QJsonObject& type, const QVariantMap& features = QVariantMap());
+    void createRoute(const QString& typeId, const QVariantMap& features = QVariantMap());
     void renameRoute(const QString& routeId, const QString& name);
 
 signals:
+    void routeChanged(QString routeId);
     void routesChanged();
     void routeTypesChanged();
 
