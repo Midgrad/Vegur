@@ -2,21 +2,21 @@
 
 #include <QSignalSpy>
 
-#include "route.h"
+#include "mission.h"
 
 using namespace md::domain;
 
-class RouteTest : public ::testing::Test
+class MissionTest : public ::testing::Test
 {
 public:
-    RouteTest()
+    MissionTest()
     {
     }
 
     Route route;
 };
 
-TEST_F(RouteTest, testAddWaypoints)
+TEST_F(MissionTest, testRouteAddWaypoints)
 {
     QSignalSpy addSpy(&route, &Route::waypointAdded);
 
@@ -36,7 +36,7 @@ TEST_F(RouteTest, testAddWaypoints)
     EXPECT_TRUE(route.waypoins().contains(&wpt2));
 }
 
-TEST_F(RouteTest, testRemoveWaypoints)
+TEST_F(MissionTest, testRouteRemoveWaypoints)
 {
     QSignalSpy removeSpy(&route, &Route::waypointRemoved);
 

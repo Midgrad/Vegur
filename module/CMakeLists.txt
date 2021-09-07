@@ -1,6 +1,9 @@
 # Project
 project(Vegur)
 
+# Set output directory
+set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${MODULE_OUTPUT_DIRECTORY})
+
 # Find Qt libraries
 find_package(Qt5 ${QT_REQUIRED_VERSION} COMPONENTS Gui Qml REQUIRED)
 
@@ -29,4 +32,4 @@ qt5_add_resources(QRC_SOURCES ${QRC_FILES} ${LOC_QRC_FILES})
 target_sources(${PROJECT_NAME} PRIVATE ${QRC_SOURCES})
 
 # Libraries
-target_link_libraries(${PROJECT_NAME} PUBLIC vegur_api Qt5::Gui Qt5::Qml)
+target_link_libraries(${PROJECT_NAME} PUBLIC vegur_impl Qt5::Gui Qt5::Qml)
