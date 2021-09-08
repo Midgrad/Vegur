@@ -32,7 +32,7 @@ QAbstractListModel* MissionsController::missions()
 
 void MissionsController::addNewMission()
 {
-    m_missionsService->addMission(new Mission());
+    m_missionsService->addMission(new Mission("New Mission"));
 }
 
 void MissionsController::removeMission(domain::Mission* mission)

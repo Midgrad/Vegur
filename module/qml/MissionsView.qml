@@ -41,7 +41,7 @@ Controls.Button {
                     Layout.fillWidth: true
                 }
 
-                Controls.MenuButton {
+                Controls.Button {
                     flat: true
                     iconSource: "qrc:/icons/plus.svg"
                     onClicked: controller.addNewMission()
@@ -62,12 +62,9 @@ Controls.Button {
                 id: list
                 model: controller.missions
                 emptyText: qsTr("No Missions")
-                delegate: Controls.Label {
+                delegate: Mission {
                     width: parent.width
-                    text: model.name
-                    //height: visible ? implicitHeight : 0
-                    //visible: route.name && route.name.includes(filterField.text)
-                    //routeId: modelData
+                    mission: model.entity
                 }
                 Layout.fillWidth: true
                 Layout.fillHeight: true

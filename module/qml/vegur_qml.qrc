@@ -1,6 +1,7 @@
 <RCC>
     <qresource prefix="/Vegur">
         <file>MissionsView.qml</file>
+        <file>Mission.qml</file>
         <file>RoutesView.qml</file>
         <file>Route.qml</file>
     </qresource>
