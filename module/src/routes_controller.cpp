@@ -18,12 +18,21 @@ using namespace md::presentation;
 RoutesController::RoutesController(QObject* parent) :
     QObject(parent),
     m_pTree(md::app::Locator::get<IPropertyTree>()),
+    m_missionsService(md::app::Locator::get<IMissionsService>()),
     m_uow(new data_source::JsonRepositoryFiles(::routesFolder),
           new data_source::JsonRepositoryFiles(::routeTypesFolder), this)
 {
     Q_ASSERT(m_pTree);
-
     connect(m_pTree, &IPropertyTree::rootNodesChanged, this, &RoutesController::vehiclesChanged);
+
+    Q_ASSERT(m_missionsService);
+    connect(m_missionsService, &IMissionsService::missionAdded, this, [this](Mission* mission) {
+        m_missionsModel.add(mission);
+    });
+    connect(m_missionsService, &IMissionsService::missionRemoved, this, [this](Mission* mission) {
+        m_missionsModel.remove(mission);
+    });
+    m_missionsModel.reset(m_missionsService->missions());
 
     m_uow.updateRouteTypes();
     m_uow.updateRoutes();
@@ -31,6 +40,11 @@ RoutesController::RoutesController(QObject* parent) :
     connect(&m_uow, &RoutesUow::routeChanged, this, &RoutesController::routeChanged);
     connect(&m_uow, &RoutesUow::routesChanged, this, &RoutesController::routesChanged);
     connect(&m_uow, &RoutesUow::routeTypesChanged, this, &RoutesController::routeTypesChanged);
+}
+
+QAbstractListModel* RoutesController::missions()
+{
+    return &m_missionsModel;
 }
 
 QStringList RoutesController::routes() const

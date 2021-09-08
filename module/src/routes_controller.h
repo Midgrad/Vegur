@@ -4,7 +4,9 @@
 #include <QJsonObject>
 #include <QMap>
 
+#include "entity_model.h"
 #include "geodetic.h"
+#include "i_missions_service.h"
 #include "i_property_tree.h"
 #include "routes_uow.h"
 
@@ -13,6 +15,8 @@ namespace md::presentation
 class RoutesController : public QObject
 {
     Q_OBJECT
+
+    Q_PROPERTY(QAbstractListModel* missions READ missions CONSTANT)
 
     Q_PROPERTY(QStringList routes READ routes NOTIFY routesChanged)
     Q_PROPERTY(QStringList routeTypes READ routeTypes NOTIFY routeTypesChanged)
@@ -24,6 +28,8 @@ class RoutesController : public QObject
 
 public:
     explicit RoutesController(QObject* parent = nullptr);
+
+    QAbstractListModel* missions();
 
     QStringList routes() const;
     QStringList routeTypes() const;
@@ -54,6 +60,8 @@ signals:
 
 private:
     domain::IPropertyTree* const m_pTree;
+    domain::IMissionsService* const m_missionsService;
+    EntityModel<domain::Mission> m_missionsModel;
 
     domain::RoutesUow m_uow;
     domain::Geodetic m_centerPosition;

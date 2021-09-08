@@ -1,16 +1,19 @@
-#ifndef I_MISSION_SERVICE_H
-#define I_MISSION_SERVICE_H
+#ifndef I_MISSIONS_SERVICE_H
+#define I_MISSIONS_SERVICE_H
 
+#include "i_service.h"
 #include "mission.h"
 
 namespace md::domain
 {
-class IMissionService : public QObject
+class IMissionsService
+    : public QObject
+    , public IService
 {
     Q_OBJECT
 
 public:
-    IMissionService(QObject* parent) : QObject(parent)
+    IMissionsService(QObject* parent) : QObject(parent), IService()
     {
     }
 
@@ -26,4 +29,4 @@ signals:
 };
 } // namespace md::domain
 
-#endif // I_MISSION_SERVICE_H
+#endif // I_MISSIONS_SERVICE_H

@@ -1,17 +1,17 @@
-#include "mission_service.h"
+#include "missions_service.h"
 
 using namespace md::domain;
 
-MissionService::MissionService(QObject* parent) : IMissionService(parent)
+MissionsService::MissionsService(QObject* parent) : IMissionsService(parent)
 {
 }
 
-QList<Mission*> MissionService::missions() const
+QList<Mission*> MissionsService::missions() const
 {
     return m_missions;
 }
 
-void MissionService::addMission(Mission* mission)
+void MissionsService::addMission(Mission* mission)
 {
     if (m_missions.contains(mission))
         return;
@@ -23,14 +23,13 @@ void MissionService::addMission(Mission* mission)
     emit missionAdded(mission);
 }
 
-void MissionService::removeMission(Mission* mission)
+void MissionsService::removeMission(Mission* mission)
 {
     if (!m_missions.contains(mission))
         return;
 
-    if (mission->parent() == this)
-        mission->setParent(nullptr);
-
     m_missions.removeOne(mission);
     emit missionRemoved(mission);
+
+    mission->deleteLater();
 }

@@ -2,7 +2,7 @@
 
 #include <QSignalSpy>
 
-#include "mission_service.h"
+#include "missions_service.h"
 
 using namespace md::domain;
 
@@ -13,12 +13,12 @@ public:
     {
     }
 
-    MissionService service;
+    MissionsService service;
 };
 
 TEST_F(MissionServiceTest, testAddMission)
 {
-    QSignalSpy addSpy(&service, &MissionService::missionAdded);
+    QSignalSpy addSpy(&service, &MissionsService::missionAdded);
 
     auto mission = new Mission();
     service.addMission(mission);
@@ -32,7 +32,7 @@ TEST_F(MissionServiceTest, testRemoveMission)
     Mission mission;
     service.addMission(&mission);
 
-    QSignalSpy removeSpy(&service, &MissionService::missionRemoved);
+    QSignalSpy removeSpy(&service, &MissionsService::missionRemoved);
 
     service.removeMission(&mission);
 

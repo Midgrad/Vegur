@@ -1,16 +1,16 @@
-#ifndef MISSION_SERVICE_H
-#define MISSION_SERVICE_H
+#ifndef MISSIONS_SERVICE_H
+#define MISSIONS_SERVICE_H
 
-#include "i_mission_service.h"
+#include "i_missions_service.h"
 
 namespace md::domain
 {
-class MissionService : public IMissionService
+class MissionsService : public IMissionsService
 {
     Q_OBJECT
 
 public:
-    explicit MissionService(QObject* parent = nullptr);
+    explicit MissionsService(QObject* parent = nullptr);
 
     QList<Mission*> missions() const override;
 
@@ -23,4 +23,4 @@ private:
 };
 } // namespace md::domain
 
-#endif // MISSION_SERVICE_H
+#endif // MISSIONS_SERVICE_H
