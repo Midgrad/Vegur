@@ -1,6 +1,7 @@
 #ifndef ROUTE_H
 #define ROUTE_H
 
+#include "route_type.h"
 #include "waypoint.h"
 
 namespace md::domain
