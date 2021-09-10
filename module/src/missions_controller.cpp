@@ -13,7 +13,7 @@ MissionsController::MissionsController(QObject* parent) :
     m_missionsService(md::app::Locator::get<IMissionsService>())
 {
     Q_ASSERT(m_pTree);
-    //connect(m_pTree, &IPropertyTree::rootNodesChanged, this, &MissionsController::vehiclesChanged);
+    connect(m_pTree, &IPropertyTree::rootNodesChanged, this, &MissionsController::vehiclesChanged);
 
     Q_ASSERT(m_missionsService);
     connect(m_missionsService, &IMissionsService::missionAdded, this, [this](Mission* mission) {
@@ -40,7 +40,7 @@ QStringList MissionsController::vehicles() const
 
 void MissionsController::addNewMission(const QString& vehicleId)
 {
-    auto mission = new Mission("New Mission");
+    auto mission = new Mission("mission_id", "New Mission");
     mission->setVehicle(vehicleId);
 
     m_missionsService->addMission(mission);

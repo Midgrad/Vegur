@@ -20,7 +20,7 @@ TEST_F(MissionServiceTest, testAddMission)
 {
     QSignalSpy addSpy(&service, &MissionsService::missionAdded);
 
-    auto mission = new Mission();
+    auto mission = new Mission("id", "Name");
     service.addMission(mission);
 
     EXPECT_TRUE(service.missions().contains(mission));
@@ -29,7 +29,7 @@ TEST_F(MissionServiceTest, testAddMission)
 
 TEST_F(MissionServiceTest, testRemoveMission)
 {
-    Mission mission;
+    Mission mission("id", "Name");
     service.addMission(&mission);
 
     QSignalSpy removeSpy(&service, &MissionsService::missionRemoved);

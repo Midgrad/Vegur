@@ -10,7 +10,7 @@ class Route : public Entity
     Q_OBJECT
 
 public:
-    explicit Route(QObject* parent = nullptr);
+    explicit Route(const QVariant& id, const QString& name, QObject* parent = nullptr);
 
     const QList<Waypoint*>& waypoins() const;
 

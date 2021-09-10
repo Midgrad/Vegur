@@ -10,7 +10,7 @@ class Waypoint : public Entity
     Q_OBJECT
 
 public:
-    explicit Waypoint(QObject* parent = nullptr);
+    explicit Waypoint(const QVariant& id, const QString& name, QObject* parent = nullptr);
 };
 } // namespace md::domain
 
