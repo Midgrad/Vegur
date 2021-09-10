@@ -30,9 +30,20 @@ QAbstractListModel* MissionsController::missions()
     return &m_missionsModel;
 }
 
-void MissionsController::addNewMission()
+QStringList MissionsController::vehicles() const
 {
-    m_missionsService->addMission(new Mission("New Mission"));
+    // TODO: vehicles only
+    QStringList result = m_pTree->rootNodes();
+    result.prepend(QString());
+    return result;
+}
+
+void MissionsController::addNewMission(const QString& vehicleId)
+{
+    auto mission = new Mission("New Mission");
+    mission->setVehicle(vehicleId);
+
+    m_missionsService->addMission(mission);
 }
 
 void MissionsController::removeMission(domain::Mission* mission)

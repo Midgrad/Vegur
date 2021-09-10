@@ -41,30 +41,37 @@ Controls.Button {
                     Layout.fillWidth: true
                 }
 
-                Controls.Button {
+                Controls.MenuButton {
                     flat: true
                     iconSource: "qrc:/icons/plus.svg"
-                    onClicked: controller.addNewMission()
+                    model: controller.vehicles
+                    delegate: Controls.MenuItem {
+                        text: modelData
+                        onTriggered: controller.addNewMission(modelData)
+                    }
                 }
-
-//                Controls.MenuButton {
-//                    flat: true
-//                    iconSource: "qrc:/icons/plus.svg"
-//                    model: controller.routeTypes
-//                    delegate: Controls.MenuItem {
-//                        text: controller.routeTypeData(modelData).name
-//                        onTriggered: controller.createRoute(modelData)
-//                    }
-//                }
             }
 
             Widgets.ListWrapper {
                 id: list
                 model: controller.missions
                 emptyText: qsTr("No Missions")
-                delegate: Mission {
+                delegate: Widgets.ListItem {
+                    id: listItem
                     width: parent.width
-                    mission: model.entity
+                    color: "transparent"
+                    expanded: list.currentIndex === index
+
+                    collapsedItem: Mission {
+                        mission: model.entity
+                        onExpand: list.currentIndex = index
+                        opacity: list.currentIndex == -1 ? 1 : 0.5
+                    }
+
+                    expandedItem: MissionEdit {
+                        mission: model.entity
+                        onCollapse: list.currentIndex = -1
+                    }
                 }
                 Layout.fillWidth: true
                 Layout.fillHeight: true

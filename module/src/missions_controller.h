@@ -12,15 +12,20 @@ class MissionsController : public QObject
     Q_OBJECT
 
     Q_PROPERTY(QAbstractListModel* missions READ missions CONSTANT)
+    Q_PROPERTY(QStringList vehicles READ vehicles NOTIFY vehiclesChanged)
 
 public:
     explicit MissionsController(QObject* parent = nullptr);
 
     QAbstractListModel* missions();
+    QStringList vehicles() const;
 
 public slots:
-    void addNewMission();
+    void addNewMission(const QString& vehicleId);
     void removeMission(domain::Mission* mission);
+
+signals:
+    void vehiclesChanged();
 
 private:
     domain::IPropertyTree* const m_pTree;
