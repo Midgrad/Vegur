@@ -1,27 +1,20 @@
 #ifndef WAYPOINT_TYPE_H
 #define WAYPOINT_TYPE_H
 
-#include "entity.h"
+#include <QList>
+#include <QString>
 
 namespace md::domain
 {
-class WaypointParameter
+class WaypointType
 {
 public:
-    QString name;
-    QString type;
-    QString unit;
-    QVariant min;
-    QVariant max;
-    QVariant step;
-};
+    WaypointType(const QString& name);
 
-class WaypointType : public Entity
-{
-    Q_OBJECT
+    virtual const QString& name() const;
 
-public:
-    explicit WaypointType(const QVariant& id, const QString& name, QObject* parent = nullptr);
+private:
+    const QString m_name;
 };
 } // namespace md::domain
 

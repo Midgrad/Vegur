@@ -2,18 +2,18 @@
 
 using namespace md::domain;
 
-MissionType::MissionType(const QVariant& id, const QString& name,
-                         const QList<RouteType*>& routeTypes, QObject* parent) :
-    Entity(id, name, parent),
+MissionType::MissionType(const QString& name, const QList<RouteType>& routeTypes) :
+    m_name(name),
     m_routeTypes(routeTypes)
 {
-    for (RouteType* routeType : m_routeTypes)
-    {
-        routeType->setParent(this);
-    }
 }
 
-const QList<RouteType*>& MissionType::routeTypes() const
+const QString& MissionType::name() const
+{
+    return m_name;
+}
+
+const QList<RouteType>& MissionType::routeTypes() const
 {
     return m_routeTypes;
 }

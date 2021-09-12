@@ -5,18 +5,17 @@
 
 namespace md::domain
 {
-class RouteType : public Entity
+class RouteType
 {
-    Q_OBJECT
-
 public:
-    RouteType(const QVariant& id, const QString& name, const QList<WaypointType*>& waypointTypes,
-              QObject* parent = nullptr);
+    RouteType(const QString& name, const QList<WaypointType>& waypointTypes);
 
-    const QList<WaypointType*>& waypointTypes() const;
+    const QString& name() const;
+    const QList<WaypointType>& waypointTypes() const;
 
 private:
-    const QList<WaypointType*> m_waypointTypes;
+    const QString m_name;
+    const QList<WaypointType> m_waypointTypes;
 };
 } // namespace md::domain
 

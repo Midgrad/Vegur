@@ -1,6 +1,7 @@
 #ifndef WAYPOINT_H
 #define WAYPOINT_H
 
+#include "entity.h"
 #include "waypoint_type.h"
 
 namespace md::domain

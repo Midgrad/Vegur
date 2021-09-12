@@ -5,18 +5,17 @@
 
 namespace md::domain
 {
-class MissionType : public Entity
+class MissionType
 {
-    Q_OBJECT
-
 public:
-    MissionType(const QVariant& id, const QString& name, const QList<RouteType*>& routeTypes,
-                QObject* parent = nullptr);
+    MissionType(const QString& name, const QList<RouteType>& routeTypes);
 
-    const QList<RouteType*>& routeTypes() const;
+    const QString& name() const;
+    const QList<RouteType>& routeTypes() const;
 
 private:
-    const QList<RouteType*> m_routeTypes;
+    const QString m_name;
+    const QList<RouteType> m_routeTypes;
 };
 } // namespace md::domain
 

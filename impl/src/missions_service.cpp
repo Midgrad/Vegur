@@ -11,6 +11,11 @@ QList<Mission*> MissionsService::missions() const
     return m_missions;
 }
 
+QList<MissionType> MissionsService::missionTypes() const
+{
+    return m_missionTypes;
+}
+
 void MissionsService::addMission(Mission* mission)
 {
     if (m_missions.contains(mission))
@@ -32,4 +37,12 @@ void MissionsService::removeMission(Mission* mission)
     emit missionRemoved(mission);
 
     mission->deleteLater();
+}
+
+void MissionsService::addMissionType(const MissionType& missionType)
+{
+}
+
+void MissionsService::removeMissionType(const MissionType& missionType)
+{
 }
