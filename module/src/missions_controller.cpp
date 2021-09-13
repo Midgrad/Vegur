@@ -25,9 +25,14 @@ MissionsController::MissionsController(QObject* parent) :
     m_missionsModel.reset(m_missionsService->missions());
 }
 
-QAbstractListModel* MissionsController::missions()
+QAbstractListModel* MissionsController::missions() const
 {
-    return &m_missionsModel;
+    return const_cast<EntityModel<domain::Mission>*>(&m_missionsModel);
+}
+
+QStringList MissionsController::missionTypes() const
+{
+    return m_missionsService->missionTypes();
 }
 
 QStringList MissionsController::vehicles() const
@@ -38,12 +43,9 @@ QStringList MissionsController::vehicles() const
     return result;
 }
 
-void MissionsController::addNewMission(const QString& vehicleId)
+void MissionsController::addNewMission(const QString& missionType)
 {
-    auto mission = new Mission("mission_id", "New Mission");
-    mission->setVehicle(vehicleId);
-
-    m_missionsService->addMission(mission);
+    m_missionsService->createMission(missionType);
 }
 
 void MissionsController::removeMission(domain::Mission* mission)

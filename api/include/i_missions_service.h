@@ -1,8 +1,8 @@
 #ifndef I_MISSIONS_SERVICE_H
 #define I_MISSIONS_SERVICE_H
 
+#include "i_mission_factory.h"
 #include "i_service.h"
-#include "mission.h"
 
 namespace md::domain
 {
@@ -18,21 +18,19 @@ public:
     }
 
     virtual QList<Mission*> missions() const = 0;
-    virtual QList<MissionType> missionTypes() const = 0;
+    virtual QStringList missionTypes() const = 0;
+
+    virtual void registerMissionType(const QString& type, IMissionFactory* factory) = 0;
 
 public slots:
-    virtual void addMission(Mission* mission) = 0;
+    virtual void createMission(const QString& type) = 0;
     virtual void removeMission(Mission* mission) = 0;
-
-    virtual void addMissionType(const MissionType& missionType) = 0;
-    virtual void removeMissionType(const MissionType& missionType) = 0;
 
 signals:
     void missionAdded(Mission* mission);
     void missionRemoved(Mission* mission);
 
-    void missionTypeAdded(MissionType* mission);
-    void missionTypeRemoved(MissionType* mission);
+    void errored(QString error);
 };
 } // namespace md::domain
 

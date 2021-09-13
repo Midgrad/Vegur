@@ -1,5 +1,7 @@
 #include "missions_service.h"
 
+#include <QDebug>
+
 using namespace md::domain;
 
 MissionsService::MissionsService(QObject* parent) : IMissionsService(parent)
@@ -11,18 +13,30 @@ QList<Mission*> MissionsService::missions() const
     return m_missions;
 }
 
-QList<MissionType> MissionsService::missionTypes() const
+QStringList MissionsService::missionTypes() const
 {
-    return m_missionTypes;
+    return m_missionFactories.keys();
 }
 
-void MissionsService::addMission(Mission* mission)
+void MissionsService::registerMissionType(const QString& type, IMissionFactory* factory)
 {
-    if (m_missions.contains(mission))
-        return;
+    if (m_missionFactories.contains(type))
+        qCritical() << "Factory registration with existing type name!";
 
-    if (!mission->parent())
-        mission->setParent(this);
+    m_missionFactories.insert(type, factory);
+}
+
+void MissionsService::createMission(const QString& type)
+{
+    IMissionFactory* factory = m_missionFactories.value(type, nullptr);
+    if (!factory)
+    {
+        emit errored(tr("Invalid mission type"));
+        return;
+    }
+
+    Mission* mission = factory->create();
+    mission->setParent(this);
 
     m_missions.append(mission);
     emit missionAdded(mission);
@@ -37,12 +51,4 @@ void MissionsService::removeMission(Mission* mission)
     emit missionRemoved(mission);
 
     mission->deleteLater();
-}
-
-void MissionsService::addMissionType(const MissionType& missionType)
-{
-}
-
-void MissionsService::removeMissionType(const MissionType& missionType)
-{
 }

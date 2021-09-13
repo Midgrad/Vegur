@@ -13,18 +13,17 @@ public:
     explicit MissionsService(QObject* parent = nullptr);
 
     QList<Mission*> missions() const override;
-    QList<MissionType> missionTypes() const override;
+    QStringList missionTypes() const override;
+
+    void registerMissionType(const QString& type, IMissionFactory* factory);
 
 public slots:
-    void addMission(Mission* mission) override;
+    void createMission(const QString& type) override;
     void removeMission(Mission* mission) override;
-
-    void addMissionType(const MissionType& missionType) override;
-    void removeMissionType(const MissionType& missionType) override;
 
 private:
     QList<Mission*> m_missions;
-    QList<MissionType> m_missionTypes;
+    QMap<QString, IMissionFactory*> m_missionFactories;
 };
 } // namespace md::domain
 

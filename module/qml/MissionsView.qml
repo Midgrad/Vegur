@@ -44,7 +44,7 @@ Controls.Button {
                 Controls.MenuButton {
                     flat: true
                     iconSource: "qrc:/icons/plus.svg"
-                    model: controller.vehicles
+                    model: controller.missionTypes
                     delegate: Controls.MenuItem {
                         text: modelData
                         onTriggered: controller.addNewMission(modelData)
