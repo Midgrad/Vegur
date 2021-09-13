@@ -15,7 +15,7 @@ Item {
     GridLayout {
         id: grid
         anchors.fill: parent
-        rowSpacing: 1
+        rowSpacing: Controls.Theme.spacing
         columnSpacing: 1
         columns: 2
 
@@ -43,23 +43,64 @@ Item {
                 value: mission ? controller.vehicles.indexOf(mission.vehicle) : -1
                 when: !vehiclesCombo.activeFocus
             }
+            onActivated: mission.vehicle = currentItem
             Layout.fillWidth: true
         }
 
-        Controls.Label {
-            text: qsTr("Route")
-            Layout.fillWidth: true
-        }
+//        Controls.Label {
+//            text: qsTr("Route")
+//            Layout.fillWidth: true
+//        }
 
-        Controls.ComboBox {
-            id: routesCombo
+//        Controls.ComboBox {
+//            id: routesCombo
+//            flat: true
+//            model: controller.routes
+//            Binding on currentIndex {
+//                value: mission ? controller.routes.indexOf(mission.route) : -1
+//                when: !routesCombo.activeFocus
+//            }
+//            Layout.fillWidth: true
+//        }
+        Controls.ProgressBar {
             flat: true
-            model: controller.routes
-            Binding on currentIndex {
-                value: mission ? controller.routes.indexOf(mission.route) : -1
-                when: !routesCombo.activeFocus
-            }
+            implicitHeight: Controls.Theme.switchSize
             Layout.fillWidth: true
+            Layout.columnSpan: 2
+        }
+
+        Controls.ButtonBar {
+            Layout.fillWidth: true
+            Layout.columnSpan: 2
+
+            Controls.Button {
+                text: qsTr("Download")
+                enabled: mission && mission.vehicle.length
+                onClicked: mission.download()
+            }
+
+            Controls.Button {
+                text: qsTr("Upload")
+                enabled: mission && mission.vehicle.length
+                onClicked: mission.upload()
+            }
+
+            Controls.Button {
+                text: qsTr("Cancel")
+                visible: false
+            }
+
+            Controls.Button {
+                text: qsTr("Remove")
+                highlightColor: Controls.Theme.colors.negative
+                hoverColor: highlightColor
+                onClicked: controller.removeMission(mission)
+            }
+
+            Controls.Button {
+                text: qsTr("Close")
+                onClicked: collapse()
+            }
         }
     }
 }

@@ -1,7 +1,6 @@
 #ifndef MISSION_H
 #define MISSION_H
 
-#include "mission_type.h"
 #include "route.h"
 
 namespace md::domain
@@ -25,6 +24,10 @@ public slots:
 signals:
     void vehicleChanged(QString vehicle);
     void routeChanged(Route* route);
+
+    void upload();   // To the vehicle
+    void download(); // From the vehicle
+    void cancel();   // Downloading or uploading
 
 private:
     QString m_vehicle;
