@@ -44,7 +44,7 @@ TEST_F(MissionServiceTest, testAddTypeAndCreateMission)
     MissionFactoryMock mock;
     service.registerMissionType("test type", &mock);
 
-    Mission* mission = new Mission("test_mission_id", "Test Mission");
+    Mission* mission = new Mission("type", "Test Mission");
     EXPECT_CALL(mock, create()).WillOnce(::testing::Return(mission));
 
     service.createMission("test type");

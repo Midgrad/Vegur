@@ -15,11 +15,12 @@ public:
     QList<Mission*> missions() const override;
     QStringList missionTypes() const override;
 
-    void registerMissionType(const QString& type, IMissionFactory* factory);
+    void registerMissionType(const QString& type, IMissionFactory* factory) override;
 
 public slots:
     void createMission(const QString& type) override;
     void removeMission(Mission* mission) override;
+    void saveMission(Mission* mission) override;
 
 private:
     QList<Mission*> m_missions;

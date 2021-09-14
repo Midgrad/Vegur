@@ -9,7 +9,7 @@ using namespace md::domain;
 class MissionTest : public ::testing::Test
 {
 public:
-    MissionTest() : route("id", "Name")
+    MissionTest() : route("Name")
     {
     }
 
@@ -41,9 +41,7 @@ TEST_F(MissionTest, testRouteRemoveWaypoints)
     QSignalSpy removeSpy(&route, &Route::waypointRemoved);
 
     Waypoint wpt1("id_1", "Name 1");
-    ;
     Waypoint wpt2("id_2", "Name 2");
-    ;
 
     route.addWaypoint(&wpt1);
     route.addWaypoint(&wpt2);

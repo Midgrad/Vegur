@@ -25,6 +25,7 @@ public:
 public slots:
     void addNewMission(const QString& missionType);
     void removeMission(domain::Mission* mission);
+    void assignMission(domain::Mission* mission, const QString& vehicle);
 
 signals:
     void vehiclesChanged();

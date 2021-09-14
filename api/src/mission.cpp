@@ -2,9 +2,15 @@
 
 using namespace md::domain;
 
-Mission::Mission(const QVariant& id, const QString& name, QObject* parent) :
-    Entity(id, name, parent)
+Mission::Mission(const QString& type, const QString& name, QObject* parent) :
+    Entity(name, parent),
+    m_type(type)
 {
+}
+
+QString Mission::type() const
+{
+    return m_type;
 }
 
 QString Mission::vehicle() const
@@ -15,6 +21,16 @@ QString Mission::vehicle() const
 Route* Mission::route() const
 {
     return m_route;
+}
+
+int Mission::progress() const
+{
+    return m_progress;
+}
+
+int Mission::total() const
+{
+    return m_total;
 }
 
 void Mission::setVehicle(const QString& vehicle)
@@ -33,4 +49,22 @@ void Mission::setRoute(Route* route)
 
     m_route = route;
     emit routeChanged(route);
+}
+
+void Mission::setProgres(int progress)
+{
+    if (m_progress == progress)
+        return;
+
+    m_progress = progress;
+    emit progressChanged();
+}
+
+void Mission::setTotal(int total)
+{
+    if (m_total == total)
+        return;
+
+    m_total = total;
+    emit totalChanged();
 }

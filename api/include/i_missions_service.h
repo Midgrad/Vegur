@@ -25,6 +25,7 @@ public:
 public slots:
     virtual void createMission(const QString& type) = 0;
     virtual void removeMission(Mission* mission) = 0;
+    virtual void saveMission(Mission* mission) = 0;
 
 signals:
     void missionAdded(Mission* mission);

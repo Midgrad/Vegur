@@ -52,3 +52,8 @@ void MissionsService::removeMission(Mission* mission)
 
     mission->deleteLater();
 }
+
+void MissionsService::saveMission(Mission* mission)
+{
+    // TODO: save
+}

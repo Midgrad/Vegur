@@ -43,7 +43,7 @@ Item {
                 value: mission ? controller.vehicles.indexOf(mission.vehicle) : -1
                 when: !vehiclesCombo.activeFocus
             }
-            onActivated: mission.vehicle = currentItem
+            onActivated: controller.assignMission(mission, currentItem)
             Layout.fillWidth: true
         }
 
@@ -63,24 +63,30 @@ Item {
 //            Layout.fillWidth: true
 //        }
         Controls.ProgressBar {
-            flat: true
             implicitHeight: Controls.Theme.switchSize
+            flat: true
+            from: 0
+            to: mission ? mission.total : 0
+            value: mission ? mission.progress : 0
             Layout.fillWidth: true
             Layout.columnSpan: 2
         }
 
         Controls.ButtonBar {
+            flat: true
             Layout.fillWidth: true
             Layout.columnSpan: 2
 
             Controls.Button {
                 text: qsTr("Download")
+                borderColor: Controls.Theme.colors.controlBorder
                 enabled: mission && mission.vehicle.length
                 onClicked: mission.download()
             }
 
             Controls.Button {
                 text: qsTr("Upload")
+                borderColor: Controls.Theme.colors.controlBorder
                 enabled: mission && mission.vehicle.length
                 onClicked: mission.upload()
             }
@@ -92,13 +98,18 @@ Item {
 
             Controls.Button {
                 text: qsTr("Remove")
+                borderColor: Controls.Theme.colors.controlBorder
                 highlightColor: Controls.Theme.colors.negative
                 hoverColor: highlightColor
-                onClicked: controller.removeMission(mission)
+                onClicked: {
+                    collapse();
+                    controller.removeMission(mission);
+                }
             }
 
             Controls.Button {
                 text: qsTr("Close")
+                borderColor: Controls.Theme.colors.controlBorder
                 onClicked: collapse()
             }
         }

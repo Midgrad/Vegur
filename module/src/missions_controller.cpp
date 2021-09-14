@@ -52,3 +52,21 @@ void MissionsController::removeMission(domain::Mission* mission)
 {
     m_missionsService->removeMission(mission);
 }
+
+void MissionsController::assignMission(domain::Mission* mission, const QString& vehicle)
+{
+    for (domain::Mission* oldMission : m_missionsService->missions())
+    {
+        if (oldMission->vehicle() == vehicle)
+        {
+            if (oldMission == mission)
+                return;
+
+            oldMission->setVehicle(QString());
+            m_missionsService->saveMission(oldMission);
+        }
+    }
+
+    mission->setVehicle(vehicle);
+    m_missionsService->saveMission(mission);
+}

@@ -2,7 +2,7 @@
 
 using namespace md::domain;
 
-Route::Route(const QVariant& id, const QString& name, QObject* parent) : Entity(id, name, parent)
+Route::Route(const QString& name, QObject* parent) : Entity(name, parent)
 {
 }
 
