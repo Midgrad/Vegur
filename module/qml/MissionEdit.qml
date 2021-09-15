@@ -63,17 +63,30 @@ Item {
 //            Layout.fillWidth: true
 //        }
         Controls.ProgressBar {
-            implicitHeight: Controls.Theme.switchSize
+            id: progress
             flat: true
+            implicitHeight: bar.height
+            radius: Controls.Theme.rounding
             from: 0
+            visible: mission && !mission.complete
             to: mission ? mission.total : 0
             value: mission ? mission.progress : 0
             Layout.fillWidth: true
             Layout.columnSpan: 2
+
+            Controls.Button {
+                anchors.fill: parent
+                flat: true
+                tipText: qsTr("Cancel")
+                text: progress.value + "/" + progress.to
+                onClicked: mission.cancel()
+            }
         }
 
         Controls.ButtonBar {
+            id: bar
             flat: true
+            visible: mission && mission.complete
             Layout.fillWidth: true
             Layout.columnSpan: 2
 

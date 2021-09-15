@@ -33,6 +33,11 @@ int Mission::total() const
     return m_total;
 }
 
+bool Mission::isComplete() const
+{
+    return m_progress >= m_total;
+}
+
 void Mission::setVehicle(const QString& vehicle)
 {
     if (m_vehicle == vehicle)
@@ -57,13 +62,18 @@ void Mission::setRoute(Route* route)
     emit routeChanged(route);
 }
 
-void Mission::setProgres(int progress)
+void Mission::setProgress(int progress)
 {
     if (m_progress == progress)
         return;
 
+    bool complete = this->isComplete();
+
     m_progress = progress;
     emit progressChanged();
+
+    if (complete != this->isComplete())
+        emit completeChanged();
 }
 
 void Mission::setTotal(int total)
@@ -71,6 +81,11 @@ void Mission::setTotal(int total)
     if (m_total == total)
         return;
 
+    bool complete = this->isComplete();
+
     m_total = total;
     emit totalChanged();
+
+    if (complete != this->isComplete())
+        emit completeChanged();
 }

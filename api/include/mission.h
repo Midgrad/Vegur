@@ -12,8 +12,9 @@ class Mission : public Entity
     Q_PROPERTY(QString type READ type CONSTANT)
     Q_PROPERTY(QString vehicle READ vehicle WRITE setVehicle NOTIFY vehicleChanged)
 
-    Q_PROPERTY(int progress READ progress WRITE setProgres NOTIFY progressChanged)
+    Q_PROPERTY(int progress READ progress WRITE setProgress NOTIFY progressChanged)
     Q_PROPERTY(int total READ total WRITE setTotal NOTIFY totalChanged)
+    Q_PROPERTY(bool complete READ isComplete NOTIFY completeChanged)
 
 public:
     Mission(const QString& type, const QString& name, QObject* parent = nullptr);
@@ -24,12 +25,13 @@ public:
 
     int progress() const;
     int total() const;
+    bool isComplete() const;
 
 public slots:
     void setVehicle(const QString& vehicle);
     void setRoute(Route* route);
 
-    void setProgres(int progress);
+    void setProgress(int progress);
     void setTotal(int total);
 
 signals:
@@ -38,6 +40,7 @@ signals:
 
     void progressChanged();
     void totalChanged();
+    void completeChanged();
 
     void upload();   // To the vehicle
     void download(); // From the vehicle
