@@ -1,7 +1,6 @@
 #ifndef ROUTE_H
 #define ROUTE_H
 
-#include "route_type.h"
 #include "waypoint.h"
 
 namespace md::domain
@@ -13,7 +12,9 @@ class Route : public Entity
 public:
     Route(const QString& name, QObject* parent = nullptr);
 
-    const QList<Waypoint*>& waypoins() const;
+    int count() const;
+    const QList<Waypoint*>& waypoints() const;
+    Waypoint* waypoint(int index) const;
 
 public slots:
     void addWaypoint(Waypoint* waypoint);

@@ -35,7 +35,7 @@ void MissionsService::createMission(const QString& type)
         return;
     }
 
-    Mission* mission = factory->create();
+    Mission* mission = factory->createMission();
     mission->setParent(this);
 
     m_missions.append(mission);

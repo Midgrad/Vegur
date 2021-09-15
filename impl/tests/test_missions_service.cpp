@@ -10,7 +10,7 @@ using namespace md::domain;
 class MissionFactoryMock : public IMissionFactory
 {
 public:
-    MOCK_METHOD(Mission*, create, (), (override));
+    MOCK_METHOD(Mission*, createMission, (), (override));
 };
 
 class MissionServiceTest : public ::testing::Test
@@ -45,7 +45,7 @@ TEST_F(MissionServiceTest, testAddTypeAndCreateMission)
     service.registerMissionType("test type", &mock);
 
     Mission* mission = new Mission("type", "Test Mission");
-    EXPECT_CALL(mock, create()).WillOnce(::testing::Return(mission));
+    EXPECT_CALL(mock, createMission()).WillOnce(::testing::Return(mission));
 
     service.createMission("test type");
 

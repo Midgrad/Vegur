@@ -47,6 +47,12 @@ void Mission::setRoute(Route* route)
     if (m_route == route)
         return;
 
+    if (route->thread() != this->thread())
+        route->moveToThread(this->thread());
+
+    if (!route->parent())
+        route->setParent(this);
+
     m_route = route;
     emit routeChanged(route);
 }

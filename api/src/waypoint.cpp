@@ -2,7 +2,6 @@
 
 using namespace md::domain;
 
-Waypoint::Waypoint(const QVariant& id, const QString& name, QObject* parent) :
-    Entity(id, name, parent)
+Waypoint::Waypoint(const QString& name, QObject* parent) : Entity(name, parent)
 {
 }

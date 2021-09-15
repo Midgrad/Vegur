@@ -6,15 +6,28 @@ Route::Route(const QString& name, QObject* parent) : Entity(name, parent)
 {
 }
 
-const QList<Waypoint*>& Route::waypoins() const
+int Route::count() const
+{
+    return m_waypoins.count();
+}
+
+const QList<Waypoint*>& Route::waypoints() const
 {
     return m_waypoins;
+}
+
+Waypoint* Route::waypoint(int index) const
+{
+    return m_waypoins.value(index, nullptr);
 }
 
 void Route::addWaypoint(Waypoint* waypoint)
 {
     if (m_waypoins.contains(waypoint))
         return;
+
+    if (waypoint->thread() != this->thread())
+        waypoint->moveToThread(this->thread());
 
     if (!waypoint->parent())
         waypoint->setParent(this);
