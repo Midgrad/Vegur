@@ -23,6 +23,14 @@ bool Parameter::isNull() const
     return name.isNull(); // This is enough
 }
 
+namespace md::domain
+{
+bool operator==(const Parameter& left, const Parameter& right)
+{
+    return left.name == right.name;
+}
+} // namespace md::domain
+
 WaypointType::WaypointType(const QString& name, const QVector<Parameter>& parameters) :
     name(name),
     parameters(parameters)

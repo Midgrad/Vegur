@@ -8,13 +8,14 @@ namespace md::domain
 {
 class Parameter
 {
+    Q_GADGET
+
 public:
     enum Type
     {
         Bool,
         Int,
-        Real,
-        Coordinate
+        Real
     };
     Parameter(const QString& name, Type type = Real, const QVariant& defaultValue = 0,
               const QVariant& minValue = -qInf(), const QVariant& maxValue = qInf(),
@@ -29,10 +30,16 @@ public:
     const QVariant minValue;
     const QVariant maxValue;
     const QVariant step;
+
+    Q_ENUM(Type)
 };
+
+bool operator==(const Parameter& left, const Parameter& right);
 
 class WaypointType
 {
+    Q_GADGET
+
 public:
     WaypointType(const QString& name, const QVector<Parameter>& parameters);
 
