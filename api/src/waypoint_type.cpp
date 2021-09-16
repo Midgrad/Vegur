@@ -18,8 +18,25 @@ Parameter::Parameter(const Parameter& other) :
 {
 }
 
+bool Parameter::isNull() const
+{
+    return name.isNull(); // This is enough
+}
+
 WaypointType::WaypointType(const QString& name, const QVector<Parameter>& parameters) :
     name(name),
     parameters(parameters)
 {
+}
+
+Parameter WaypointType::parameter(const QString& name) const
+{
+    auto result = std::find_if(parameters.begin(), parameters.end(),
+                               [name](const Parameter& parameter) {
+                                   return parameter.name == name;
+                               });
+    if (result != std::end(parameters))
+        return *result;
+
+    return Parameter(QString());
 }

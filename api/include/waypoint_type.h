@@ -21,6 +21,8 @@ public:
               const QVariant& step = 1);
     Parameter(const Parameter& other);
 
+    bool isNull() const;
+
     const QString name;
     const Type type;
     const QVariant defaultValue;
@@ -33,6 +35,8 @@ class WaypointType
 {
 public:
     WaypointType(const QString& name, const QVector<Parameter>& parameters);
+
+    Parameter parameter(const QString& name) const;
 
     const QString name;
     const QVector<Parameter> parameters;

@@ -6,6 +6,7 @@ Waypoint::Waypoint(const WaypointType* type, QObject* parent) :
     Entity(type->name, parent),
     m_type(type)
 {
+    this->syncParameters();
 }
 
 const WaypointType* Waypoint::type() const
@@ -41,5 +42,9 @@ void Waypoint::syncParameters()
 
 void Waypoint::resetParameter(const QString& key)
 {
-    // this->setParameter(key, m_type)
+    Parameter parameter = m_type->parameter(key);
+    if (parameter.isNull())
+        return;
+
+    this->setParameter(key, parameter.defaultValue);
 }
