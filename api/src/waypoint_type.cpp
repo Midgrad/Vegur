@@ -2,11 +2,24 @@
 
 using namespace md::domain;
 
-WaypointType::WaypointType(const QString& name) : m_name(name)
+Parameter::Parameter(const QString& name, Type type, const QVariant& defaultValue,
+                     const QVariant& minValue, const QVariant& maxValue, const QVariant& step) :
+    name(name),
+    type(type),
+    defaultValue(defaultValue),
+    minValue(minValue),
+    maxValue(maxValue),
+    step(step)
 {
 }
 
-const QString& WaypointType::name() const
+Parameter::Parameter(const Parameter& other) :
+    Parameter(other.name, other.type, other.defaultValue, other.minValue, other.maxValue, other.step)
 {
-    return m_name;
+}
+
+WaypointType::WaypointType(const QString& name, const QVector<Parameter>& parameters) :
+    name(name),
+    parameters(parameters)
+{
 }

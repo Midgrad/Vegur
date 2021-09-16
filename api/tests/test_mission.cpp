@@ -20,8 +20,10 @@ TEST_F(MissionTest, testRouteAddWaypoints)
 {
     QSignalSpy addSpy(&route, &Route::waypointAdded);
 
-    Waypoint wpt1("WPT 1");
-    Waypoint wpt2("WPT 2");
+    WaypointType type("WPT", {});
+
+    Waypoint wpt1(&type);
+    Waypoint wpt2(&type);
 
     route.addWaypoint(&wpt1);
 
@@ -40,8 +42,10 @@ TEST_F(MissionTest, testRouteRemoveWaypoints)
 {
     QSignalSpy removeSpy(&route, &Route::waypointRemoved);
 
-    Waypoint wpt1("WPT 1");
-    Waypoint wpt2("WPT 2");
+    WaypointType type("WPT", {});
+
+    Waypoint wpt1(&type);
+    Waypoint wpt2(&type);
 
     route.addWaypoint(&wpt1);
     route.addWaypoint(&wpt2);

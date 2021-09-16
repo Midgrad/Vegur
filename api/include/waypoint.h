@@ -11,7 +11,20 @@ class Waypoint : public Entity
     Q_OBJECT
 
 public:
-    explicit Waypoint(const QString& name, QObject* parent = nullptr);
+    explicit Waypoint(const WaypointType* type, QObject* parent = nullptr);
+
+    const WaypointType* type() const;
+
+public slots:
+    void setType(const WaypointType* type);
+    void syncParameters();
+    void resetParameter(const QString& key);
+
+signals:
+    void typeChanged();
+
+private:
+    const WaypointType* m_type;
 };
 } // namespace md::domain
 

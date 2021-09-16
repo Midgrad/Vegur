@@ -25,6 +25,7 @@ signals:
     void waypointRemoved(Waypoint* waypoint);
 
 private:
+    const QList<WaypointType> m_waypoinsTypes;
     QList<Waypoint*> m_waypoins;
 };
 } // namespace md::domain
