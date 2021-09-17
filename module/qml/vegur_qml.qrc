@@ -3,7 +3,5 @@
         <file>MissionsView.qml</file>
         <file>Mission.qml</file>
         <file>MissionEdit.qml</file>
-        <file>RoutesView.qml</file>
-        <file>Route.qml</file>
     </qresource>
 </RCC>

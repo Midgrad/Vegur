@@ -13,6 +13,9 @@ class Waypoint : public Entity
 public:
     explicit Waypoint(const WaypointType* type, QObject* parent = nullptr);
 
+    QJsonObject toJson() const override;
+    void fromJson(const QJsonObject& json) override;
+
     const WaypointType* type() const;
 
 public slots:

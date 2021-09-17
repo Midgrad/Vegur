@@ -2,10 +2,24 @@
 
 using namespace md::domain;
 
-Mission::Mission(const QString& type, const QString& name, QObject* parent) :
-    Entity(name, parent),
+Mission::Mission(const QString& type, const QVariant& id, const QString& name, QObject* parent) :
+    Entity(id, name, parent),
     m_type(type)
 {
+}
+
+QJsonObject Mission::toJson() const
+{
+    QJsonObject json = Entity::toJson();
+
+    json.insert(params::type, m_type);
+
+    return json;
+}
+
+void Mission::fromJson(const QJsonObject& json)
+{
+    Entity::fromJson(json);
 }
 
 QString Mission::type() const

@@ -9,6 +9,20 @@ Waypoint::Waypoint(const WaypointType* type, QObject* parent) :
     this->syncParameters();
 }
 
+QJsonObject Waypoint::toJson() const
+{
+    QJsonObject json = Entity::toJson();
+
+    json.insert(params::type, m_type->name);
+
+    return json;
+}
+
+void Waypoint::fromJson(const QJsonObject& json)
+{
+    Entity::fromJson(json);
+}
+
 const WaypointType* Waypoint::type() const
 {
     return m_type;

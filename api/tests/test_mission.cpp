@@ -12,7 +12,7 @@ class MissionTest : public ::testing::Test
 
 TEST_F(MissionTest, testMissionComplete)
 {
-    Mission mission("Type", "Name");
+    Mission mission("Type", "id", "Name");
     QSignalSpy spy(&mission, &Mission::completeChanged);
 
     EXPECT_TRUE(mission.isComplete());

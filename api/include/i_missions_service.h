@@ -23,15 +23,15 @@ public:
     virtual void registerMissionType(const QString& type, IMissionFactory* factory) = 0;
 
 public slots:
+    virtual void readAllMissions() = 0;
     virtual void createMission(const QString& type) = 0;
     virtual void removeMission(Mission* mission) = 0;
+    virtual void restoreMission(Mission* mission) = 0;
     virtual void saveMission(Mission* mission) = 0;
 
 signals:
     void missionAdded(Mission* mission);
     void missionRemoved(Mission* mission);
-
-    void errored(QString error);
 };
 } // namespace md::domain
 

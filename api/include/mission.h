@@ -17,7 +17,10 @@ class Mission : public Entity
     Q_PROPERTY(bool complete READ isComplete NOTIFY completeChanged)
 
 public:
-    Mission(const QString& type, const QString& name, QObject* parent = nullptr);
+    Mission(const QString& type, const QVariant& id, const QString& name, QObject* parent = nullptr);
+
+    QJsonObject toJson() const override;
+    void fromJson(const QJsonObject& json) override;
 
     QString type() const;
     QString vehicle() const;

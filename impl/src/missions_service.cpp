@@ -2,15 +2,20 @@
 
 #include <QDebug>
 
+#include "utils.h"
+
 using namespace md::domain;
 
-MissionsService::MissionsService(QObject* parent) : IMissionsService(parent)
+MissionsService::MissionsService(data_source::IJsonGateway* repository, QObject* parent) :
+    IMissionsService(parent),
+    m_repository(repository)
 {
+    m_repository->setParent(this);
 }
 
 QList<Mission*> MissionsService::missions() const
 {
-    return m_missions;
+    return m_missions.values();
 }
 
 QStringList MissionsService::missionTypes() const
@@ -26,34 +31,78 @@ void MissionsService::registerMissionType(const QString& type, IMissionFactory* 
     m_missionFactories.insert(type, factory);
 }
 
+void MissionsService::readAllMissions()
+{
+    for (const QVariant& id : m_repository->selectIds())
+    {
+        QJsonObject json = m_repository->read(id);
+        QString type = json.value(params::type).toString();
+
+        IMissionFactory* factory = m_missionFactories.value(type, nullptr);
+        if (!factory)
+        {
+            qWarning() << "No mission factory for type" << type;
+            continue;
+        }
+
+        domain::Mission* mission = factory->createMission(json.value(params::name).toString());
+        mission->fromJson(json);
+        m_missions[id] = mission;
+        emit missionAdded(mission);
+    }
+}
+
 void MissionsService::createMission(const QString& type)
 {
     IMissionFactory* factory = m_missionFactories.value(type, nullptr);
     if (!factory)
     {
-        emit errored(tr("Invalid mission type"));
+        qWarning() << "No mission factory for type" << type;
         return;
     }
 
-    Mission* mission = factory->createMission();
-    mission->setParent(this);
-
-    m_missions.append(mission);
-    emit missionAdded(mission);
+    QStringList names;
+    for (Mission* mission : qAsConst(m_missions))
+    {
+        names += mission->name();
+    }
+    QString name = utils::nameFromType(type, names);
+    this->saveMission(factory->createMission(name));
 }
 
 void MissionsService::removeMission(Mission* mission)
 {
-    if (!m_missions.contains(mission))
+    if (!mission->id().isNull())
+        m_repository->remove(mission->id());
+
+    if (m_missions.contains(mission->id()))
+        m_missions.remove(mission->id());
+
+    emit missionRemoved(mission);
+    mission->deleteLater();
+}
+
+void MissionsService::restoreMission(Mission* mission)
+{
+    if (mission->id().isNull())
         return;
 
-    m_missions.removeOne(mission);
-    emit missionRemoved(mission);
-
-    mission->deleteLater();
+    QJsonObject json = m_repository->read(mission->id());
+    if (!json.isEmpty())
+        mission->fromJson(json);
 }
 
 void MissionsService::saveMission(Mission* mission)
 {
-    // TODO: save
+    if (mission->id().isNull())
+    {
+        qWarning() << "Can't save mission with no id" << mission;
+        return;
+    }
+
+    m_repository->save(mission->id(), mission->toJson());
+    m_missions[mission->id()] = mission;
+
+    mission->setParent(this);
+    emit missionAdded(mission);
 }

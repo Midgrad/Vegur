@@ -5,18 +5,30 @@
 
 #include "missions_service.h"
 
+using namespace ::testing;
 using namespace md::domain;
 
 class MissionFactoryMock : public IMissionFactory
 {
 public:
-    MOCK_METHOD(Mission*, createMission, (), (override));
+    MOCK_METHOD(Mission*, createMission, (const QString&), (override));
 };
 
-class MissionServiceTest : public ::testing::Test
+class JsonGatewayMock : public md::data_source::IJsonGateway
 {
 public:
-    MissionServiceTest()
+    MOCK_METHOD(QVariantList, selectIds, (), (const, override));
+    MOCK_METHOD(QList<QJsonObject>, readAll, (), (const, override));
+    MOCK_METHOD(QJsonObject, read, (const QVariant&), (const, override));
+
+    MOCK_METHOD(void, save, (const QVariant&, const QJsonObject&), (override));
+    MOCK_METHOD(void, remove, (const QVariant&), (override));
+};
+
+class MissionServiceTest : public Test
+{
+public:
+    MissionServiceTest() : service(new JsonGatewayMock())
     {
     }
 
@@ -26,26 +38,23 @@ public:
 TEST_F(MissionServiceTest, testCreateMissionWithNoType)
 {
     QSignalSpy addSpy(&service, &MissionsService::missionAdded);
-    QSignalSpy erroredSpy(&service, &MissionsService::errored);
 
     service.createMission("invalid type");
 
     EXPECT_TRUE(service.missions().isEmpty());
     EXPECT_EQ(addSpy.count(), 0);
-    EXPECT_EQ(erroredSpy.count(), 1);
 }
 
 TEST_F(MissionServiceTest, testAddTypeAndCreateMission)
 {
     QSignalSpy addSpy(&service, &MissionsService::missionAdded);
     QSignalSpy removeSpy(&service, &MissionsService::missionRemoved);
-    QSignalSpy erroredSpy(&service, &MissionsService::errored);
 
     MissionFactoryMock mock;
     service.registerMissionType("test type", &mock);
 
-    Mission* mission = new Mission("type", "Test Mission");
-    EXPECT_CALL(mock, createMission()).WillOnce(::testing::Return(mission));
+    Mission* mission = new Mission("type", "test_mission_1", "Test Mission 1");
+    EXPECT_CALL(mock, createMission(_)).WillOnce(::testing::Return(mission));
 
     service.createMission("test type");
 
@@ -53,7 +62,6 @@ TEST_F(MissionServiceTest, testAddTypeAndCreateMission)
     EXPECT_TRUE(service.missions().contains(mission));
     EXPECT_EQ(mission->parent(), &service);
     EXPECT_EQ(addSpy.count(), 1);
-    EXPECT_EQ(erroredSpy.count(), 0);
 
     service.removeMission(mission);
 

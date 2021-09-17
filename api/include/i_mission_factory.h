@@ -11,7 +11,7 @@ public:
     IMissionFactory() = default;
     virtual ~IMissionFactory() = default;
 
-    virtual Mission* createMission() = 0;
+    virtual Mission* createMission(const QString& name) = 0;
 };
 } // namespace md::domain
 

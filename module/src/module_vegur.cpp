@@ -4,17 +4,20 @@
 #include <QGuiApplication>
 #include <QQmlEngine>
 
-#include "i_property_tree.h"
+#include "json_gateway_files.h"
 #include "locator.h"
 #include "missions_controller.h"
 #include "missions_service.h"
-#include "routes_controller.h"
+
+namespace
+{
+constexpr char missionsFolder[] = "./missions";
+}
 
 using namespace md::app;
 
 void registerTypes()
 {
-    qmlRegisterType<md::presentation::RoutesController>("Dreka.Vegur", 1, 0, "RoutesController");
     qmlRegisterType<md::presentation::MissionsController>("Dreka.Vegur", 1, 0, "MissionsController");
 }
 
@@ -22,7 +25,12 @@ Q_COREAPP_STARTUP_FUNCTION(registerTypes);
 
 ModuleVegur::ModuleVegur()
 {
-    Locator::provide<domain::IMissionsService>(new domain::MissionsService(this));
+    auto missionService = new domain::MissionsService(new data_source::JsonGatewayFiles(
+                                                          ::missionsFolder),
+                                                      this);
+
+    missionService->readAllMissions();
+    Locator::provide<domain::IMissionsService>(missionService);
 }
 
 ModuleVegur::~ModuleVegur()
@@ -33,5 +41,4 @@ ModuleVegur::~ModuleVegur()
 void ModuleVegur::visit(QJsonObject& features)
 {
     md::utils::insertInArray(features, "menu", "qrc:/Vegur/MissionsView.qml");
-    md::utils::insertInArray(features, "menu", "qrc:/Vegur/RoutesView.qml");
 }

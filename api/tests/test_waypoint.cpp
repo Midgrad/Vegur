@@ -49,3 +49,26 @@ TEST_F(WaypointTest, testChangeWaypointType)
     EXPECT_EQ(wpt.parameter("Param 2"), 33);
     EXPECT_EQ(wpt.parameter("Param 3"), true);
 }
+
+TEST_F(WaypointTest, testFromJson)
+{
+    QJsonObject json;
+    json.insert(params::name, "WPT");
+
+    const Parameter param("Param", Parameter::Real);
+    const WaypointType type("Type", { param });
+
+    //Waypoint wpt(&type, json.value(params::id).toVariant());
+}
+
+//TEST_F(WaypointTest, testToJson)
+//{
+//    Waypoint wpt;
+
+//    QJsonObject json;
+//    json.insert(md::params::id, QJsonValue::fromVariant(args.id));
+//    json.insert(md::params::name, args.name);
+//    json.insert(md::params::params, QJsonValue::fromVariant(args.params));
+
+//    EXPECT_EQ(json, wpt.toJson());
+//}
