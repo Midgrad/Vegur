@@ -4,6 +4,8 @@
 #include <QVariant>
 #include <QVector>
 
+#include "vegur_traits.h"
+
 namespace md::domain
 {
 class Parameter

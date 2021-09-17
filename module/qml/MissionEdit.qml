@@ -123,7 +123,10 @@ Item {
             Controls.Button {
                 text: qsTr("Close")
                 borderColor: Controls.Theme.colors.controlBorder
-                onClicked: collapse()
+                onClicked: {
+                    controller.saveMission(mission);
+                    collapse();
+                }
             }
         }
     }

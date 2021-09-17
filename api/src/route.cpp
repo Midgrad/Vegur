@@ -1,9 +1,31 @@
 #include "route.h"
 
+#include <QJsonArray>
+
 using namespace md::domain;
 
 Route::Route(const QString& name, QObject* parent) : Entity(name, parent)
 {
+}
+
+QJsonObject Route::toJson() const
+{
+    QJsonObject json = Entity::toJson();
+
+    QJsonArray waypoints;
+    for (Waypoint* waypoint : m_waypoins)
+    {
+        waypoints.append(waypoint->toJson());
+    }
+
+    json.insert(params::waypoints, waypoints);
+
+    return json;
+}
+
+void Route::fromJson(const QJsonObject& json)
+{
+    Entity::fromJson(json);
 }
 
 int Route::count() const

@@ -25,12 +25,8 @@ Q_COREAPP_STARTUP_FUNCTION(registerTypes);
 
 ModuleVegur::ModuleVegur()
 {
-    auto missionService = new domain::MissionsService(new data_source::JsonGatewayFiles(
-                                                          ::missionsFolder),
-                                                      this);
-
-    missionService->readAllMissions();
-    Locator::provide<domain::IMissionsService>(missionService);
+    Locator::provide<domain::IMissionsService>(
+        new domain::MissionsService(new data_source::JsonGatewayFiles(::missionsFolder), this));
 }
 
 ModuleVegur::~ModuleVegur()

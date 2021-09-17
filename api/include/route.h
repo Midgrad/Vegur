@@ -12,6 +12,9 @@ class Route : public Entity
 public:
     Route(const QString& name, QObject* parent = nullptr);
 
+    QJsonObject toJson() const override;
+    void fromJson(const QJsonObject& json) override;
+
     int count() const;
     const QList<Waypoint*>& waypoints() const;
     Waypoint* waypoint(int index) const;

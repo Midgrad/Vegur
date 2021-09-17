@@ -48,6 +48,11 @@ void MissionsController::addNewMission(const QString& missionType)
     m_missionsService->createMission(missionType);
 }
 
+void MissionsController::saveMission(domain::Mission* mission)
+{
+    m_missionsService->saveMission(mission);
+}
+
 void MissionsController::removeMission(domain::Mission* mission)
 {
     m_missionsService->removeMission(mission);

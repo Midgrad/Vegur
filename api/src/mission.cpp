@@ -13,6 +13,10 @@ QJsonObject Mission::toJson() const
     QJsonObject json = Entity::toJson();
 
     json.insert(params::type, m_type);
+    json.insert(params::vehicle, m_vehicle);
+
+    if (m_route)
+        json.insert(params::route, m_route->toJson());
 
     return json;
 }

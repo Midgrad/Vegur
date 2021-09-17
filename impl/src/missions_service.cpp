@@ -29,6 +29,7 @@ void MissionsService::registerMissionType(const QString& type, IMissionFactory* 
         qCritical() << "Factory registration with existing type name!";
 
     m_missionFactories.insert(type, factory);
+    this->readAllMissions();
 }
 
 void MissionsService::readAllMissions()
@@ -38,17 +39,25 @@ void MissionsService::readAllMissions()
         QJsonObject json = m_repository->read(id);
         QString type = json.value(params::type).toString();
 
-        IMissionFactory* factory = m_missionFactories.value(type, nullptr);
-        if (!factory)
+        domain::Mission* mission = nullptr;
+        if (m_missions.contains(id))
         {
-            qWarning() << "No mission factory for type" << type;
-            continue;
+            mission = m_missions.value(id);
         }
-
-        domain::Mission* mission = factory->createMission(json.value(params::name).toString());
+        else
+        {
+            IMissionFactory* factory = m_missionFactories.value(type, nullptr);
+            if (!factory)
+            {
+                qWarning() << "No mission factory for type" << type;
+                continue;
+            }
+            mission = factory->createMission(json.value(params::name).toString());
+            m_missions[id] = mission;
+            mission->setParent(this);
+            emit missionAdded(mission);
+        }
         mission->fromJson(json);
-        m_missions[id] = mission;
-        emit missionAdded(mission);
     }
 }
 
@@ -101,8 +110,11 @@ void MissionsService::saveMission(Mission* mission)
     }
 
     m_repository->save(mission->id(), mission->toJson());
-    m_missions[mission->id()] = mission;
 
-    mission->setParent(this);
-    emit missionAdded(mission);
+    if (!m_missions.contains(mission->id()))
+    {
+        m_missions[mission->id()] = mission;
+        mission->setParent(this);
+        emit missionAdded(mission);
+    }
 }
