@@ -20,16 +20,25 @@ QList<Mission*> MissionsService::missions() const
 
 QStringList MissionsService::missionTypes() const
 {
-    return m_missionFactories.keys();
+    return m_missionTypes;
 }
 
-void MissionsService::registerMissionType(const QString& type, IMissionFactory* factory)
+void MissionsService::registerMissionType(const QString& type)
 {
-    if (m_missionFactories.contains(type))
-        qCritical() << "Factory registration with existing type name!";
+    if (m_missionTypes.contains(type))
+        return;
 
-    m_missionFactories.insert(type, factory);
-    this->readAllMissions();
+    m_missionTypes.append(type);
+    emit missionTypesChanged(m_missionTypes);
+}
+
+void MissionsService::unregisterMissionType(const QString& type)
+{
+    if (!m_missionTypes.contains(type))
+        return;
+
+    m_missionTypes.removeOne(type);
+    emit missionTypesChanged(m_missionTypes);
 }
 
 void MissionsService::readAllMissions()
@@ -37,47 +46,33 @@ void MissionsService::readAllMissions()
     for (const QVariant& id : m_repository->selectIds())
     {
         QJsonObject json = m_repository->read(id);
-        QString type = json.value(params::type).toString();
+        // Verify id, remove when repository
+        json[params::id] = id.toString();
 
-        domain::Mission* mission = nullptr;
         if (m_missions.contains(id))
         {
-            mission = m_missions.value(id);
+            m_missions.value(id)->fromJson(json);
         }
         else
         {
-            IMissionFactory* factory = m_missionFactories.value(type, nullptr);
-            if (!factory)
-            {
-                qWarning() << "No mission factory for type" << type;
-                continue;
-            }
-            mission = factory->createMission(json.value(params::name).toString());
-            m_missions[id] = mission;
-            mission->setParent(this);
-            mission->fromJson(json);
+            Mission* mission = new Mission(json, this);
+            m_missions.insert(id, mission);
             emit missionAdded(mission);
         }
-        mission->fromJson(json);
     }
 }
 
 void MissionsService::createMission(const QString& type)
 {
-    IMissionFactory* factory = m_missionFactories.value(type, nullptr);
-    if (!factory)
-    {
-        qWarning() << "No mission factory for type" << type;
-        return;
-    }
-
     QStringList names;
     for (Mission* mission : qAsConst(m_missions))
     {
         names += mission->name();
     }
     QString name = utils::nameFromType(type, names);
-    this->saveMission(factory->createMission(name));
+
+    Mission* mission = new Mission(type, utils::nameToId(name), name, this);
+    this->saveMission(mission);
 }
 
 void MissionsService::removeMission(Mission* mission)
@@ -98,8 +93,7 @@ void MissionsService::restoreMission(Mission* mission)
         return;
 
     QJsonObject json = m_repository->read(mission->id());
-    if (!json.isEmpty())
-        mission->fromJson(json);
+    mission->fromJson(json);
 }
 
 void MissionsService::saveMission(Mission* mission)

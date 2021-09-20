@@ -10,7 +10,8 @@ class Route : public Entity
     Q_OBJECT
 
 public:
-    Route(const QString& name, QObject* parent = nullptr);
+    Route(QObject* parent = nullptr);
+    Route(const QJsonObject& json, QObject* parent = nullptr);
 
     QJsonObject toJson() const override;
     void fromJson(const QJsonObject& json) override;
@@ -28,7 +29,7 @@ signals:
     void waypointRemoved(Waypoint* waypoint);
 
 private:
-    const QList<WaypointType> m_waypoinsTypes;
+    //const QList<WaypointType> m_waypoinsTypes;
     QList<Waypoint*> m_waypoins;
 };
 } // namespace md::domain

@@ -9,7 +9,7 @@ using namespace md::domain;
 class RouteTest : public ::testing::Test
 {
 public:
-    RouteTest() : route("Name")
+    RouteTest() : route()
     {
     }
 
@@ -20,10 +20,8 @@ TEST_F(RouteTest, testRouteAddWaypoints)
 {
     QSignalSpy addSpy(&route, &Route::waypointAdded);
 
-    WaypointType type("WPT", {});
-
-    Waypoint wpt1(&type);
-    Waypoint wpt2(&type);
+    Waypoint wpt1("WPT 1", QString());
+    Waypoint wpt2("WPT 2", QString());
 
     route.addWaypoint(&wpt1);
 
@@ -46,8 +44,8 @@ TEST_F(RouteTest, testRouteRemoveWaypoints)
 
     WaypointType type("WPT", {});
 
-    Waypoint wpt1(&type);
-    Waypoint wpt2(&type);
+    Waypoint wpt1("WPT 1", QString());
+    Waypoint wpt2("WPT 2", QString());
 
     route.addWaypoint(&wpt1);
     route.addWaypoint(&wpt2);

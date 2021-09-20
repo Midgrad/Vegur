@@ -16,7 +16,8 @@ public:
     QList<Mission*> missions() const override;
     QStringList missionTypes() const override;
 
-    void registerMissionType(const QString& type, IMissionFactory* factory) override;
+    void registerMissionType(const QString& type) override;
+    void unregisterMissionType(const QString& type) override;
 
 public slots:
     void readAllMissions() override;
@@ -27,7 +28,7 @@ public slots:
 
 private:
     data_source::IJsonGateway* const m_repository;
-    QMap<QString, IMissionFactory*> m_missionFactories;
+    QList<QString> m_missionTypes;
     QMap<QVariant, Mission*> m_missions;
 };
 } // namespace md::domain

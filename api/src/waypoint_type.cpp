@@ -1,5 +1,7 @@
 #include "waypoint_type.h"
 
+#include "waypoint.h"
+
 using namespace md::domain;
 
 Parameter::Parameter(const QString& name, Type type, const QVariant& defaultValue,
@@ -59,4 +61,28 @@ Parameter WaypointType::parameter(const QString& name) const
         return *result;
 
     return Parameter(QString());
+}
+
+void WaypointType::syncParameters(Waypoint* waypoint) const
+{
+    QStringList unneededParameters = waypoint->parameters().keys();
+    for (const Parameter& parameter : this->parameters)
+    {
+        // If parameter exist - remove it from unneededParameters
+        if (!unneededParameters.removeOne(parameter.name))
+        {
+            // Or add it with default value
+            waypoint->setParameter(parameter.name, parameter.defaultValue);
+        }
+    }
+    waypoint->removeParameters(unneededParameters);
+}
+
+void WaypointType::resetParameter(Waypoint* waypoint, const QString& key) const
+{
+    Parameter parameter = this->parameter(key);
+    if (parameter.isNull())
+        return;
+
+    waypoint->setParameter(key, parameter.defaultValue);
 }

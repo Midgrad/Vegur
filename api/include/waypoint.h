@@ -10,24 +10,25 @@ class Waypoint : public Entity
 {
     Q_OBJECT
 
+    Q_PROPERTY(QString type READ type WRITE setType NOTIFY typeChanged)
+
 public:
-    explicit Waypoint(const WaypointType* type, QObject* parent = nullptr);
+    Waypoint(const QString& name, const QString& type, QObject* parent = nullptr);
+    Waypoint(const QJsonObject& json, QObject* parent = nullptr);
 
     QJsonObject toJson() const override;
     void fromJson(const QJsonObject& json) override;
 
-    const WaypointType* type() const;
+    QString type() const;
 
 public slots:
-    void setType(const WaypointType* type);
-    void syncParameters();
-    void resetParameter(const QString& key);
+    void setType(const QString& type);
 
 signals:
     void typeChanged();
 
 private:
-    const WaypointType* m_type;
+    QString m_type;
 };
 } // namespace md::domain
 

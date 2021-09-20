@@ -2,63 +2,44 @@
 
 using namespace md::domain;
 
-Waypoint::Waypoint(const WaypointType* type, QObject* parent) :
-    Entity(type->name, parent),
+Waypoint::Waypoint(const QString& name, const QString& type, QObject* parent) :
+    Entity(name, parent),
     m_type(type)
 {
-    this->syncParameters();
+}
+
+Waypoint::Waypoint(const QJsonObject& json, QObject* parent) :
+    Entity(json, parent),
+    m_type(json.value(params::type).toString())
+{
 }
 
 QJsonObject Waypoint::toJson() const
 {
     QJsonObject json = Entity::toJson();
 
-    json.insert(params::type, m_type->name);
+    json.insert(params::type, m_type);
 
     return json;
 }
 
 void Waypoint::fromJson(const QJsonObject& json)
 {
+    this->setType(json.value(params::type).toString());
+
     Entity::fromJson(json);
 }
 
-const WaypointType* Waypoint::type() const
+QString Waypoint::type() const
 {
     return m_type;
 }
 
-void Waypoint::setType(const WaypointType* type)
+void Waypoint::setType(const QString& type)
 {
     if (m_type == type)
         return;
 
     m_type = type;
     emit typeChanged();
-
-    this->syncParameters();
-}
-
-void Waypoint::syncParameters()
-{
-    QStringList unneededParameters = this->parameters().keys();
-    for (const Parameter& parameter : m_type->parameters)
-    {
-        // If parameter exist - remove it from unneededParameters
-        if (!unneededParameters.removeOne(parameter.name))
-        {
-            // Or add it with default value
-            this->setParameter(parameter.name, parameter.defaultValue);
-        }
-    }
-    this->removeParameters(unneededParameters);
-}
-
-void Waypoint::resetParameter(const QString& key)
-{
-    Parameter parameter = m_type->parameter(key);
-    if (parameter.isNull())
-        return;
-
-    this->setParameter(key, parameter.defaultValue);
 }

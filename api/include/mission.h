@@ -18,8 +18,9 @@ class Mission : public Entity
 
 public:
     Mission(const QString& type, const QVariant& id, const QString& name, QObject* parent = nullptr);
+    Mission(const QJsonObject& json, QObject* parent = nullptr);
 
-    QJsonObject toJson() const override;
+    Q_INVOKABLE QJsonObject toJson() const override;
     void fromJson(const QJsonObject& json) override;
 
     QString type() const;
@@ -32,7 +33,6 @@ public:
 
 public slots:
     void setVehicle(const QString& vehicle);
-    void setRoute(Route* route);
 
     void setProgress(int progress);
     void setTotal(int total);
@@ -52,7 +52,7 @@ signals:
 private:
     const QString m_type;
     QString m_vehicle;
-    Route* m_route = nullptr;
+    Route* const m_route;
 
     int m_progress = 0;
     int m_total = 0;

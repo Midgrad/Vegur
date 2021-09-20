@@ -39,6 +39,7 @@ public:
 
 bool operator==(const Parameter& left, const Parameter& right);
 
+class Waypoint;
 class WaypointType
 {
     Q_GADGET
@@ -47,6 +48,9 @@ public:
     WaypointType(const QString& name, const QVector<Parameter>& parameters);
 
     Parameter parameter(const QString& name) const;
+
+    void syncParameters(Waypoint* waypoint) const;
+    void resetParameter(Waypoint* waypoint, const QString& key) const;
 
     const QString name;
     const QVector<Parameter> parameters;

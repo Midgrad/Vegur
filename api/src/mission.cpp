@@ -4,7 +4,16 @@ using namespace md::domain;
 
 Mission::Mission(const QString& type, const QVariant& id, const QString& name, QObject* parent) :
     Entity(id, name, parent),
-    m_type(type)
+    m_type(type),
+    m_route(new Route(this))
+{
+}
+
+Mission::Mission(const QJsonObject& json, QObject* parent) :
+    Entity(json, parent),
+    m_type(json.value(params::type).toString()),
+    m_vehicle(json.value(params::vehicle).toString()),
+    m_route(new Route(json.value(params::route).toObject(), this))
 {
 }
 
@@ -14,9 +23,7 @@ QJsonObject Mission::toJson() const
 
     json.insert(params::type, m_type);
     json.insert(params::vehicle, m_vehicle);
-
-    if (m_route)
-        json.insert(params::route, m_route->toJson());
+    json.insert(params::route, m_route->toJson());
 
     return json;
 }
@@ -25,8 +32,7 @@ void Mission::fromJson(const QJsonObject& json)
 {
     this->setVehicle(json.value(params::vehicle).toString());
 
-    if (m_route)
-        m_route->fromJson(json.value(params::route).toObject());
+    m_route->fromJson(json.value(params::route).toObject());
 
     Entity::fromJson(json);
 }
@@ -68,21 +74,6 @@ void Mission::setVehicle(const QString& vehicle)
 
     m_vehicle = vehicle;
     emit vehicleChanged(vehicle);
-}
-
-void Mission::setRoute(Route* route)
-{
-    if (m_route == route)
-        return;
-
-    if (route->thread() != this->thread())
-        route->moveToThread(this->thread());
-
-    if (!route->parent())
-        route->setParent(this);
-
-    m_route = route;
-    emit routeChanged(route);
 }
 
 void Mission::setProgress(int progress)

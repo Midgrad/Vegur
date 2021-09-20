@@ -8,12 +8,6 @@
 using namespace ::testing;
 using namespace md::domain;
 
-class MissionFactoryMock : public IMissionFactory
-{
-public:
-    MOCK_METHOD(Mission*, createMission, (const QString&), (override));
-};
-
 class JsonGatewayMock : public md::data_source::IJsonGateway
 {
 public:
@@ -35,33 +29,16 @@ public:
     MissionsService service;
 };
 
-TEST_F(MissionServiceTest, testCreateMissionWithNoType)
-{
-    QSignalSpy addSpy(&service, &MissionsService::missionAdded);
-
-    service.createMission("invalid type");
-
-    EXPECT_TRUE(service.missions().isEmpty());
-    EXPECT_EQ(addSpy.count(), 0);
-}
-
-TEST_F(MissionServiceTest, testAddTypeAndCreateMission)
+TEST_F(MissionServiceTest, testCreateMission)
 {
     QSignalSpy addSpy(&service, &MissionsService::missionAdded);
     QSignalSpy removeSpy(&service, &MissionsService::missionRemoved);
 
-    MissionFactoryMock mock;
-    service.registerMissionType("test type", &mock);
-
-    Mission* mission = new Mission("type", "test_mission_1", "Test Mission 1");
-    EXPECT_CALL(mock, createMission(_)).WillOnce(::testing::Return(mission));
-
     service.createMission("test type");
 
     EXPECT_EQ(service.missions().count(), 1);
-    EXPECT_TRUE(service.missions().contains(mission));
-    EXPECT_EQ(mission->parent(), &service);
     EXPECT_EQ(addSpy.count(), 1);
+    Mission* mission = service.missions().first();
 
     service.removeMission(mission);
 

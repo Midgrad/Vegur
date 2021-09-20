@@ -15,19 +15,19 @@ TEST_F(WaypointTest, testResetParameter)
     const Parameter param("Param", Parameter::Real, 17.03);
     const WaypointType type("Type", { param });
 
-    Waypoint wpt(&type);
+    Waypoint wpt("WPT", QString());
 
     wpt.setParameter("Param", 621.67);
     EXPECT_EQ(wpt.parameter("Param"), 621.67);
 
-    wpt.resetParameter("Param");
+    type.resetParameter(&wpt, "Param");
     EXPECT_EQ(wpt.parameter("Param"), 17.03);
 
-    wpt.resetParameter("Param 2");
+    type.resetParameter(&wpt, "Param 2");
     // Nothing to check, just don't fail
 }
 
-TEST_F(WaypointTest, testChangeWaypointType)
+TEST_F(WaypointTest, testSyncParameters)
 {
     const Parameter param1("Param 1", Parameter::Real, 17.03);
     const Parameter param2("Param 2", Parameter::Int, 42);
@@ -36,14 +36,15 @@ TEST_F(WaypointTest, testChangeWaypointType)
     const WaypointType type1("Type 1", { param1, param2 });
     const WaypointType type2("Type 2", { param2, param3 });
 
-    Waypoint wpt(&type1);
+    Waypoint wpt("WPT", QString());
+    type1.syncParameters(&wpt);
 
     EXPECT_EQ(wpt.parameter("Param 1"), 17.03);
     EXPECT_EQ(wpt.parameter("Param 2"), 42);
     EXPECT_FALSE(wpt.parameters().contains("Param 3"));
 
     wpt.setParameter("Param 2", 33);
-    wpt.setType(&type2);
+    type2.syncParameters(&wpt);
 
     EXPECT_FALSE(wpt.parameters().contains("Param 1"));
     EXPECT_EQ(wpt.parameter("Param 2"), 33);

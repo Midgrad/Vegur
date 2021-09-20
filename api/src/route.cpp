@@ -4,8 +4,17 @@
 
 using namespace md::domain;
 
-Route::Route(const QString& name, QObject* parent) : Entity(name, parent)
+Route::Route(QObject* parent) : Entity(QString(), parent)
 {
+}
+
+Route::Route(const QJsonObject& json, QObject* parent) : Entity(json, parent)
+{
+    QJsonArray waypoints = json.value(params::waypoints).toArray();
+    for (const QJsonValue& value : waypoints)
+    {
+        m_waypoins.append(new Waypoint(value.toObject(), this));
+    }
 }
 
 QJsonObject Route::toJson() const
@@ -26,10 +35,24 @@ QJsonObject Route::toJson() const
 void Route::fromJson(const QJsonObject& json)
 {
     QJsonArray waypoints = json.value(params::waypoints).toArray();
+    int counter = 0;
     for (const QJsonValue& value : waypoints)
     {
-        // FIXME: ability to create waypoints from json
-        //Waypoint wpt = new Waypoint()
+        if (counter > m_waypoins.count())
+        {
+            m_waypoins.append(new Waypoint(value.toObject(), this));
+        }
+        else
+        {
+            m_waypoins[counter]->fromJson(value.toObject());
+        }
+        counter++;
+    }
+
+    // Remove tail from old route
+    while (m_waypoins.count() > waypoints.count())
+    {
+        this->removeWaypoint(m_waypoins.last());
     }
 
     Entity::fromJson(json);
