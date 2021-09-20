@@ -26,6 +26,7 @@ Controls.Button {
         height: Math.min(implicitHeight, main.availableHeight)
         y: root.height + Controls.Theme.margins
         x: -root.parent.x
+        onClosed: list.currentIndex = -1
 
         ColumnLayout {
             anchors.fill: parent

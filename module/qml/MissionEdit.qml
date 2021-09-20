@@ -1,6 +1,7 @@
 import QtQuick 2.6
 import QtQuick.Layouts 1.12
 import Industrial.Controls 1.0 as Controls
+import Industrial.Widgets 1.0 as Widgets
 
 Item {
     id: root
@@ -9,59 +10,38 @@ Item {
 
     signal collapse()
 
-    implicitWidth: grid.implicitWidth
-    implicitHeight: grid.implicitHeight
+    implicitWidth: column.implicitWidth
+    implicitHeight: column.implicitHeight
 
-    GridLayout {
-        id: grid
+    ColumnLayout {
+        id: column
         anchors.fill: parent
-        rowSpacing: Controls.Theme.spacing
-        columnSpacing: 1
-        columns: 2
+        spacing: Controls.Theme.spacing
 
-        Controls.Label {
-            text: qsTr("Name")
-            Layout.fillWidth: true
-        }
-
-        Controls.TextField {
+        Widgets.PropertyTable {
             flat: true
-            text: mission ? mission.name : ""
             Layout.fillWidth: true
-        }
+            labelWidth: width / 3
 
-        Controls.Label {
-            text: qsTr("Vehicle")
-            Layout.fillWidth: true
-        }
-
-        Controls.ComboBox {
-            id: vehiclesCombo
-            flat: true
-            model: controller.vehicles
-            Binding on currentIndex {
-                value: mission ? controller.vehicles.indexOf(mission.vehicle) : -1
-                when: !vehiclesCombo.activeFocus
+            Controls.TextField {
+                id: nameEdit
+                labelText: qsTr("Name")
+                Binding on text { value: mission ? mission.name : ""; when: !nameEdit.activeFocus }
+                onEditingFinished: mission.setName(text)
             }
-            onActivated: controller.assignMission(mission, currentItem)
-            Layout.fillWidth: true
+
+            Controls.ComboBox {
+                id: vehiclesCombo
+                labelText: qsTr("Vehicle")
+                model: controller.vehicles
+                Binding on currentIndex {
+                    value: mission ? controller.vehicles.indexOf(mission.vehicle) : -1
+                    when: !vehiclesCombo.activeFocus
+                }
+                onActivated: controller.assignMission(mission, currentItem)
+            }
         }
 
-//        Controls.Label {
-//            text: qsTr("Route")
-//            Layout.fillWidth: true
-//        }
-
-//        Controls.ComboBox {
-//            id: routesCombo
-//            flat: true
-//            model: controller.routes
-//            Binding on currentIndex {
-//                value: mission ? controller.routes.indexOf(mission.route) : -1
-//                when: !routesCombo.activeFocus
-//            }
-//            Layout.fillWidth: true
-//        }
         Controls.ProgressBar {
             id: progress
             flat: true
@@ -71,7 +51,6 @@ Item {
             to: mission ? mission.total : 0
             value: mission ? mission.progress : 0
             Layout.fillWidth: true
-            Layout.columnSpan: 2
 
             Controls.Button {
                 anchors.fill: parent
@@ -87,7 +66,6 @@ Item {
             flat: true
             visible: mission && mission.complete
             Layout.fillWidth: true
-            Layout.columnSpan: 2
 
             Controls.Button {
                 text: qsTr("Download")
@@ -127,6 +105,23 @@ Item {
                     collapse();
                 }
             }
+        }
+
+        Controls.Button {
+            text: qsTr("Route")
+            flat: true
+            iconSource: waypointsList.visible ? "qrc:/icons/minus.svg" : "qrc:/icons/plus.svg"
+            onClicked: waypointsList.visible = !waypointsList.visible
+            Layout.fillWidth: true
+        }
+
+        Widgets.ListWrapper {
+            id: waypointsList
+            visible: false
+            model: mission ? mission.toJson().route.waypoints : []
+            emptyText: qsTr("No Waypoints")
+            Layout.fillWidth: true
+            delegate: Controls.Label { text: modelData.name }
         }
     }
 }
