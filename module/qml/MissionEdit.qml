@@ -65,7 +65,6 @@ Item {
         Controls.ProgressBar {
             id: progress
             flat: true
-            implicitHeight: bar.height
             radius: Controls.Theme.rounding
             from: 0
             visible: mission && !mission.complete

@@ -20,11 +20,12 @@ public:
         Real
     };
     Parameter(const QString& name, Type type = Real, const QVariant& defaultValue = 0,
-              const QVariant& minValue = -qInf(), const QVariant& maxValue = qInf(),
+              const QVariant& minValue = QVariant(), const QVariant& maxValue = QVariant(),
               const QVariant& step = 1);
     Parameter(const Parameter& other);
 
     bool isNull() const;
+    QVariant guard(const QVariant& value) const;
 
     const QString name;
     const Type type;

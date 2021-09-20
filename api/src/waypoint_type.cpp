@@ -23,6 +23,18 @@ bool Parameter::isNull() const
     return name.isNull(); // This is enough
 }
 
+QVariant Parameter::guard(const QVariant& value) const
+{
+    QVariant result = value;
+    if (!minValue.isNull())
+        result = qMax(result, minValue);
+
+    if (!maxValue.isNull())
+        result = qMin(result, maxValue);
+
+    return value;
+}
+
 namespace md::domain
 {
 bool operator==(const Parameter& left, const Parameter& right)
