@@ -23,6 +23,11 @@ QJsonObject Mission::toJson() const
 
 void Mission::fromJson(const QJsonObject& json)
 {
+    this->setVehicle(json.value(params::vehicle).toString());
+
+    if (m_route)
+        m_route->fromJson(json.value(params::route).toObject());
+
     Entity::fromJson(json);
 }
 

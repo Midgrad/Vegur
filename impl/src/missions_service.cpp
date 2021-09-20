@@ -55,6 +55,7 @@ void MissionsService::readAllMissions()
             mission = factory->createMission(json.value(params::name).toString());
             m_missions[id] = mission;
             mission->setParent(this);
+            mission->fromJson(json);
             emit missionAdded(mission);
         }
         mission->fromJson(json);

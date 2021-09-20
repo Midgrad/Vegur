@@ -25,6 +25,13 @@ QJsonObject Route::toJson() const
 
 void Route::fromJson(const QJsonObject& json)
 {
+    QJsonArray waypoints = json.value(params::waypoints).toArray();
+    for (const QJsonValue& value : waypoints)
+    {
+        // FIXME: ability to create waypoints from json
+        //Waypoint wpt = new Waypoint()
+    }
+
     Entity::fromJson(json);
 }
 
