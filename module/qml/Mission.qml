@@ -10,7 +10,7 @@ Rectangle {
     signal expand()
     property bool hovered: mouseArea.containsMouse
 
-    implicitHeight: row.implicitHeight
+    implicitHeight: Controls.Theme.baseSize
     color: hovered ? Controls.Theme.colors.hover : "transparent"
     radius: Controls.Theme.rounding
 
@@ -24,11 +24,26 @@ Rectangle {
     RowLayout {
         id: row
         anchors.fill: parent
-        spacing: 0
+        spacing: Controls.Theme.spacing
 
         Controls.Label {
             text: mission ? mission.name : ""
+            Layout.leftMargin: Controls.Theme.margins
+        }
+
+        Controls.Label {
+            text: mission ? mission.vehicle : ""
+            type: Controls.Theme.Label
+        }
+
+        Item {
             Layout.fillWidth: true
+        }
+
+        Controls.ColoredIcon {
+            implicitWidth: Controls.Theme.iconSize
+            implicitHeight: width
+            source: "qrc:/icons/right.svg"
         }
     }
 }

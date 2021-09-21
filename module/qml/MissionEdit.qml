@@ -107,6 +107,7 @@ Item {
             }
         }
 
+        // TODO: RouteEditView
         Controls.Button {
             text: qsTr("Route")
             flat: true
@@ -115,13 +116,15 @@ Item {
             Layout.fillWidth: true
         }
 
+        // TODO: Waypoint & WaypointEditView
         Widgets.ListWrapper {
             id: waypointsList
             visible: false
-            model: mission ? mission.toJson().route.waypoints : []
+            model: mission ? mission.toJson(true).route.waypoints : []
             emptyText: qsTr("No Waypoints")
-            Layout.fillWidth: true
             delegate: Controls.Label { text: modelData.name }
+            Layout.fillWidth: true
+            Layout.fillHeight: true
         }
     }
 }

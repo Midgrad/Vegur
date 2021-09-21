@@ -7,9 +7,9 @@ import Dreka.Vegur 1.0
 Controls.Button {
     id: root
 
-    MissionsController {
-        id: controller
-    }
+    property var selectedMission: null
+
+    MissionsController { id: controller }
 
     Component.onCompleted: map.registerController("missionsController", controller)
 
@@ -33,6 +33,7 @@ Controls.Button {
             spacing: Controls.Theme.spacing
 
             RowLayout {
+                visible: selectedMission === null
                 spacing: Controls.Theme.spacing
 
                 Controls.FilterField {
@@ -55,24 +56,27 @@ Controls.Button {
 
             Widgets.ListWrapper {
                 id: list
-                model: controller.missions
+                visible: selectedMission === null
                 emptyText: qsTr("No Missions")
-                delegate: Widgets.ListItem {
-                    id: listItem
+                model: controller.missions
+                delegate: Mission {
                     width: parent.width
-                    color: "transparent"
-                    expanded: list.currentIndex === index
+                    height: visible ? implicitHeight : 0
+                    visible: mission && mission.name.includes(filterField.text)
+                    mission: model.entity
+                    onExpand: selectedMission = mission
+                    opacity: list.currentIndex == -1 ? 1 : 0.5
+                }
+                Layout.fillWidth: true
+                Layout.fillHeight: true
+            }
 
-                    collapsedItem: Mission {
-                        mission: model.entity
-                        onExpand: list.currentIndex = index
-                        opacity: list.currentIndex == -1 ? 1 : 0.5
-                    }
-
-                    expandedItem: MissionEdit {
-                        mission: model.entity
-                        onCollapse: list.currentIndex = -1
-                    }
+            MissionEdit {
+                visible: selectedMission !== null
+                mission: selectedMission
+                onCollapse: {
+                    root.forceActiveFocus();
+                    selectedMission = null;
                 }
                 Layout.fillWidth: true
                 Layout.fillHeight: true
