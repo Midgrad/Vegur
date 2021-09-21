@@ -13,7 +13,7 @@ public:
     Route(QObject* parent = nullptr);
     Route(const QJsonObject& json, QObject* parent = nullptr);
 
-    QJsonObject toJson() const override;
+    QJsonObject toJson(bool recursive) const override;
     void fromJson(const QJsonObject& json) override;
 
     int count() const;

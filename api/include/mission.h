@@ -20,7 +20,7 @@ public:
     Mission(const QString& type, const QVariant& id, const QString& name, QObject* parent = nullptr);
     Mission(const QJsonObject& json, QObject* parent = nullptr);
 
-    Q_INVOKABLE QJsonObject toJson() const override;
+    Q_INVOKABLE QJsonObject toJson(bool recursive) const override;
     void fromJson(const QJsonObject& json) override;
 
     QString type() const;

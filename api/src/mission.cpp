@@ -17,13 +17,14 @@ Mission::Mission(const QJsonObject& json, QObject* parent) :
 {
 }
 
-QJsonObject Mission::toJson() const
+QJsonObject Mission::toJson(bool recursive) const
 {
     QJsonObject json = Entity::toJson();
 
     json.insert(params::type, m_type);
     json.insert(params::vehicle, m_vehicle);
-    json.insert(params::route, m_route->toJson());
+    if (recursive)
+        json.insert(params::route, m_route->toJson(recursive));
 
     return json;
 }

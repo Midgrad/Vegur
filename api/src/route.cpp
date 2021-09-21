@@ -17,17 +17,20 @@ Route::Route(const QJsonObject& json, QObject* parent) : Entity(json, parent)
     }
 }
 
-QJsonObject Route::toJson() const
+QJsonObject Route::toJson(bool recursive) const
 {
     QJsonObject json = Entity::toJson();
 
-    QJsonArray waypoints;
-    for (Waypoint* waypoint : m_waypoins)
+    if (recursive)
     {
-        waypoints.append(waypoint->toJson());
-    }
+        QJsonArray waypoints;
+        for (Waypoint* waypoint : m_waypoins)
+        {
+            waypoints.append(waypoint->toJson(recursive));
+        }
 
-    json.insert(params::waypoints, waypoints);
+        json.insert(params::waypoints, waypoints);
+    }
 
     return json;
 }

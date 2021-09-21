@@ -104,7 +104,7 @@ void MissionsService::saveMission(Mission* mission)
         return;
     }
 
-    m_repository->save(mission->id(), mission->toJson());
+    m_repository->save(mission->id(), mission->toJson(true));
 
     if (!m_missions.contains(mission->id()))
     {

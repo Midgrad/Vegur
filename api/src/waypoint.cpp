@@ -14,8 +14,10 @@ Waypoint::Waypoint(const QJsonObject& json, QObject* parent) :
 {
 }
 
-QJsonObject Waypoint::toJson() const
+QJsonObject Waypoint::toJson(bool recursive) const
 {
+    Q_UNUSED(recursive)
+
     QJsonObject json = Entity::toJson();
 
     json.insert(params::type, m_type);
