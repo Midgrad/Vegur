@@ -3,5 +3,8 @@
         <file>MissionsView.qml</file>
         <file>Mission.qml</file>
         <file>MissionEdit.qml</file>
+        <file>Route.qml</file>
+        <file>Waypoint.qml</file>
+        <file>WaypointEdit.qml</file>
     </qresource>
 </RCC>

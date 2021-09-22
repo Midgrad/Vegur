@@ -7,6 +7,7 @@ Item {
     id: root
 
     property var mission
+    property bool renameMode: false
 
     signal collapse()
 
@@ -18,26 +19,50 @@ Item {
         anchors.fill: parent
         spacing: Controls.Theme.spacing
 
-        Widgets.PropertyTable {
-            flat: true
-            Layout.fillWidth: true
-            labelWidth: width / 3
+        RowLayout {
+            spacing: Controls.Theme.spacing
+
+            Controls.Button {
+                flat: true
+                iconSource: "qrc:/icons/left.svg"
+                tipText: qsTr("Back to missions")
+                onClicked: {
+                    controller.saveMission(mission);
+                    collapse();
+                }
+            }
+
+            Controls.Label {
+                text: mission ? mission.name : ""
+                visible: !renameMode
+                Layout.fillWidth: true
+
+                MouseArea {
+                    anchors.fill: parent
+                    onDoubleClicked: renameMode = true
+                }
+            }
 
             Controls.TextField {
                 id: nameEdit
-                labelText: qsTr("Name")
+                visible: renameMode
+                flat: true
                 Binding on text { value: mission ? mission.name : ""; when: !nameEdit.activeFocus }
-                onEditingFinished: mission.setName(text)
+                onEditingFinished: {
+                    mission.setName(text);
+                    renameMode = false;
+                }
+                Layout.fillWidth: true
+                Layout.fillHeight: true
+
             }
 
             Controls.ComboBox {
                 id: vehiclesCombo
+                flat: true
                 labelText: qsTr("Vehicle")
                 model: controller.vehicles
-                Binding on currentIndex {
-                    value: mission ? controller.vehicles.indexOf(mission.vehicle) : -1
-                    when: !vehiclesCombo.activeFocus
-                }
+                displayText: mission ? mission.vehicle : ""
                 onActivated: controller.assignMission(mission, currentItem)
             }
         }
@@ -96,33 +121,10 @@ Item {
                     controller.removeMission(mission);
                 }
             }
-
-            Controls.Button {
-                text: qsTr("Close")
-                borderColor: Controls.Theme.colors.controlBorder
-                onClicked: {
-                    controller.saveMission(mission);
-                    collapse();
-                }
-            }
         }
 
-        // TODO: RouteEditView
-        Controls.Button {
-            text: qsTr("Route")
-            flat: true
-            iconSource: waypointsList.visible ? "qrc:/icons/minus.svg" : "qrc:/icons/plus.svg"
-            onClicked: waypointsList.visible = !waypointsList.visible
-            Layout.fillWidth: true
-        }
-
-        // TODO: Waypoint & WaypointEditView
-        Widgets.ListWrapper {
-            id: waypointsList
-            visible: false
-            model: mission ? mission.toJson(true).route.waypoints : []
-            emptyText: qsTr("No Waypoints")
-            delegate: Controls.Label { text: modelData.name }
+        Route {
+            route: mission ? mission.toJson(true).route : null
             Layout.fillWidth: true
             Layout.fillHeight: true
         }

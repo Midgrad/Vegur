@@ -2,10 +2,11 @@ import QtQuick 2.6
 import QtQuick.Layouts 1.12
 import Industrial.Controls 1.0 as Controls
 
+// TODO: expandable
 Item {
     id: root
 
-    property var mission
+    property var waypoint
 
     signal expand()
 
@@ -34,21 +35,14 @@ Item {
         spacing: Controls.Theme.spacing
 
         Controls.Label {
-            text: mission ? mission.name : ""
+            text: waypoint ? waypoint.name : ""
             Layout.fillHeight: true
+            Layout.fillWidth: true
         }
 
         Controls.Label {
-            text: mission ? mission.vehicle : ""
+            text: waypoint ? waypoint.type : ""
             type: Controls.Theme.Label
-            Layout.fillHeight: true
-        }
-
-        Item { Layout.fillWidth: true }
-
-        Controls.ColoredIcon {
-            implicitWidth: height
-            source: "qrc:/icons/right.svg"
             Layout.fillHeight: true
         }
     }

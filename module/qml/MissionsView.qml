@@ -26,7 +26,7 @@ Controls.Button {
         height: Math.min(implicitHeight, main.availableHeight)
         y: root.height + Controls.Theme.margins
         x: -root.parent.x
-        onClosed: list.currentIndex = -1
+        onClosed: missionsList.currentIndex = -1
 
         ColumnLayout {
             anchors.fill: parent
@@ -55,7 +55,7 @@ Controls.Button {
             }
 
             Widgets.ListWrapper {
-                id: list
+                id: missionsList
                 visible: selectedMission === null
                 emptyText: qsTr("No Missions")
                 model: controller.missions
@@ -65,7 +65,7 @@ Controls.Button {
                     visible: mission && mission.name.includes(filterField.text)
                     mission: model.entity
                     onExpand: selectedMission = mission
-                    opacity: list.currentIndex == -1 ? 1 : 0.5
+                    opacity: missionsList.currentIndex == -1 ? 1 : 0.5
                 }
                 Layout.fillWidth: true
                 Layout.fillHeight: true
@@ -75,7 +75,7 @@ Controls.Button {
                 visible: selectedMission !== null
                 mission: selectedMission
                 onCollapse: {
-                    root.forceActiveFocus();
+                    missionsList.forceActiveFocus();
                     selectedMission = null;
                 }
                 Layout.fillWidth: true
