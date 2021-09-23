@@ -117,8 +117,8 @@ Item {
                 highlightColor: Controls.Theme.colors.negative
                 hoverColor: highlightColor
                 onClicked: {
-                    collapse();
                     controller.removeMission(mission);
+                    collapse();
                 }
             }
         }
