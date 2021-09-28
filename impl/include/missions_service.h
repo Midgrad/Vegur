@@ -13,6 +13,7 @@ class MissionsService : public IMissionsService
 public:
     explicit MissionsService(data_source::IJsonGateway* repository, QObject* parent = nullptr);
 
+    Mission* mission(const QVariant& id) const override;
     QList<Mission*> missions() const override;
     QStringList missionTypes() const override;
 

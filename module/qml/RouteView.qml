@@ -27,11 +27,11 @@ ColumnLayout {
             width: parent.width
             color: "transparent"
             expanded: waypointsList.currentIndex === index
-            collapsedItem: Waypoint {
+            collapsedItem: WaypointView {
                 waypoint: modelData
                 onExpand: waypointsList.currentIndex = index
             }
-            expandedItem: WaypointEdit {
+            expandedItem: WaypointEditView {
                 waypoint: modelData
                 onCollapse: waypointsList.currentIndex = -1
             }

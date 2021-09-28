@@ -13,6 +13,11 @@ MissionsService::MissionsService(data_source::IJsonGateway* repository, QObject*
     m_repository->setParent(this);
 }
 
+Mission* MissionsService::mission(const QVariant& id) const
+{
+    return m_missions.value(id, nullptr);
+}
+
 QList<Mission*> MissionsService::missions() const
 {
     return m_missions.values();

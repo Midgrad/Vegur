@@ -9,18 +9,11 @@ class Mission : public Entity
 {
     Q_OBJECT
 
-    Q_PROPERTY(QString type READ type CONSTANT)
-    Q_PROPERTY(QString vehicle READ vehicle WRITE setVehicle NOTIFY vehicleChanged)
-
-    Q_PROPERTY(int progress READ progress WRITE setProgress NOTIFY progressChanged)
-    Q_PROPERTY(int total READ total WRITE setTotal NOTIFY totalChanged)
-    Q_PROPERTY(bool complete READ isComplete NOTIFY completeChanged)
-
 public:
     Mission(const QString& type, const QVariant& id, const QString& name, QObject* parent = nullptr);
     Mission(const QJsonObject& json, QObject* parent = nullptr);
 
-    Q_INVOKABLE QJsonObject toJson(bool recursive) const override;
+    QJsonObject toJson(bool recursive) const override;
     void fromJson(const QJsonObject& json) override;
 
     QString type() const;
@@ -44,10 +37,6 @@ signals:
     void progressChanged();
     void totalChanged();
     void completeChanged();
-
-    void upload();   // To the vehicle
-    void download(); // From the vehicle
-    void cancel();   // Downloading or uploading
 
 private:
     const QString m_type;

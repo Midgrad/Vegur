@@ -6,7 +6,8 @@
 
 #include "json_gateway_files.h"
 #include "locator.h"
-#include "missions_controller.h"
+#include "mission_controller.h"
+#include "mission_list_controller.h"
 #include "missions_service.h"
 
 namespace
@@ -18,7 +19,9 @@ using namespace md::app;
 
 void registerTypes()
 {
-    qmlRegisterType<md::presentation::MissionsController>("Dreka.Vegur", 1, 0, "MissionsController");
+    qmlRegisterType<md::presentation::MissionListController>("Dreka.Vegur", 1, 0,
+                                                             "MissionListController");
+    qmlRegisterType<md::presentation::MissionController>("Dreka.Vegur", 1, 0, "MissionController");
 }
 
 Q_COREAPP_STARTUP_FUNCTION(registerTypes);
@@ -40,5 +43,5 @@ ModuleVegur::~ModuleVegur()
 
 void ModuleVegur::visit(QJsonObject& features)
 {
-    md::utils::insertInArray(features, "menu", "qrc:/Vegur/MissionsView.qml");
+    md::utils::insertInArray(features, "menu", "qrc:/Vegur/MissionListView.qml");
 }

@@ -10,8 +10,6 @@ class Waypoint : public Entity
 {
     Q_OBJECT
 
-    Q_PROPERTY(QString type READ type WRITE setType NOTIFY typeChanged)
-
 public:
     Waypoint(const QString& name, const QString& type, QObject* parent = nullptr);
     Waypoint(const QJsonObject& json, QObject* parent = nullptr);

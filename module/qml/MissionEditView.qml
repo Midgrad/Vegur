@@ -2,17 +2,22 @@ import QtQuick 2.6
 import QtQuick.Layouts 1.12
 import Industrial.Controls 1.0 as Controls
 import Industrial.Widgets 1.0 as Widgets
+import Dreka.Vegur 1.0
 
 Item {
     id: root
 
-    property var mission
     property bool renameMode: false
+    readonly property var mission : controller.mission
+
+    property alias missionId : controller.missionId
 
     signal collapse()
 
     implicitWidth: column.implicitWidth
     implicitHeight: column.implicitHeight
+
+    MissionController { id: controller }
 
     ColumnLayout {
         id: column
@@ -27,13 +32,13 @@ Item {
                 iconSource: "qrc:/icons/left.svg"
                 tipText: qsTr("Back to missions")
                 onClicked: {
-                    controller.saveMission(mission);
+                    controller.save();
                     collapse();
                 }
             }
 
             Controls.Label {
-                text: mission ? mission.name : ""
+                text: mission.name ? mission.name : ""
                 visible: !renameMode
                 Layout.fillWidth: true
 
@@ -54,7 +59,11 @@ Item {
                 }
                 Layout.fillWidth: true
                 Layout.fillHeight: true
+            }
 
+            Controls.Label {
+                text: mission.type  ? mission.type : ""
+                type: Controls.Theme.Label
             }
 
             Controls.ComboBox {
@@ -63,7 +72,7 @@ Item {
                 labelText: qsTr("Vehicle")
                 model: controller.vehicles
                 displayText: mission ? mission.vehicle : ""
-                onActivated: controller.assignMission(mission, currentItem)
+                onActivated: controller.assign(currentItem)
             }
         }
 
@@ -72,9 +81,9 @@ Item {
             flat: true
             radius: Controls.Theme.rounding
             from: 0
-            visible: mission && !mission.complete
-            to: mission ? mission.total : 0
-            value: mission ? mission.progress : 0
+            visible: !controller.complete
+            to: controller.total
+            value: controller.progress
             Layout.fillWidth: true
 
             Controls.Button {
@@ -82,28 +91,28 @@ Item {
                 flat: true
                 tipText: qsTr("Cancel")
                 text: progress.value + "/" + progress.to
-                onClicked: mission.cancel()
+                onClicked: controller.cancel()
             }
         }
 
         Controls.ButtonBar {
             id: bar
             flat: true
-            visible: mission && mission.complete
+            visible: controller.complete
             Layout.fillWidth: true
 
             Controls.Button {
                 text: qsTr("Download")
                 borderColor: Controls.Theme.colors.controlBorder
-                enabled: mission && mission.vehicle.length
-                onClicked: mission.download()
+                enabled: mission.vehicle ? mission.vehicle.length : false
+                onClicked: controller.download()
             }
 
             Controls.Button {
                 text: qsTr("Upload")
                 borderColor: Controls.Theme.colors.controlBorder
-                enabled: mission && mission.vehicle.length
-                onClicked: mission.upload()
+                enabled: mission.vehicle ? mission.vehicle.length : false
+                onClicked: controller.upload()
             }
 
             Controls.Button {
@@ -117,14 +126,14 @@ Item {
                 highlightColor: Controls.Theme.colors.negative
                 hoverColor: highlightColor
                 onClicked: {
-                    controller.removeMission(mission);
+                    controller.remove();
                     collapse();
                 }
             }
         }
 
-        Route {
-            route: mission ? mission.toJson(true).route : null
+        RouteView {
+            route: mission ? mission.route : null
             Layout.fillWidth: true
             Layout.fillHeight: true
         }

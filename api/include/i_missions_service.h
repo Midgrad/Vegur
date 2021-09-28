@@ -17,6 +17,7 @@ public:
     {
     }
 
+    virtual Mission* mission(const QVariant& id) const = 0;
     virtual QList<Mission*> missions() const = 0;
     virtual QStringList missionTypes() const = 0;
 
@@ -35,6 +36,10 @@ signals:
 
     void missionAdded(Mission* mission);
     void missionRemoved(Mission* mission);
+
+    void upload(Mission* mission);   // To the vehicle
+    void download(Mission* mission); // From the vehicle
+    void cancel(Mission* mission);   // Downloading or uploading
 };
 } // namespace md::domain
 

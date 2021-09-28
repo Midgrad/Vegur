@@ -9,9 +9,9 @@ Controls.Button {
 
     property var selectedMission: null
 
-    MissionsController { id: controller }
+    MissionListController { id: listController }
 
-    Component.onCompleted: map.registerController("missionsController", controller)
+    Component.onCompleted: map.registerController("missionsController", listController)
 
     iconSource: "qrc:/icons/mission.svg"
     tipText: qsTr("Missions")
@@ -46,10 +46,10 @@ Controls.Button {
                 Controls.MenuButton {
                     flat: true
                     iconSource: "qrc:/icons/plus.svg"
-                    model: controller.missionTypes
+                    model: listController.missionTypes
                     delegate: Controls.MenuItem {
                         text: modelData
-                        onTriggered: controller.addNewMission(modelData)
+                        onTriggered: listController.addNewMission(modelData)
                     }
                 }
             }
@@ -58,22 +58,21 @@ Controls.Button {
                 id: missionsList
                 visible: selectedMission === null
                 emptyText: qsTr("No Missions")
-                model: controller.missions
-                delegate: Mission {
+                model: listController.missions
+                delegate: MissionView {
                     width: parent.width
                     height: visible ? implicitHeight : 0
                     visible: mission && mission.name.includes(filterField.text)
-                    mission: model.entity
+                    mission: modelData
                     onExpand: selectedMission = mission
-                    opacity: missionsList.currentIndex == -1 ? 1 : 0.5
                 }
                 Layout.fillWidth: true
                 Layout.fillHeight: true
             }
 
-            MissionEdit {
+            MissionEditView {
                 visible: selectedMission !== null
-                mission: selectedMission
+                missionId: selectedMission ? selectedMission.id : null
                 onCollapse: {
                     missionsList.forceActiveFocus();
                     selectedMission = null;
