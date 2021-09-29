@@ -20,31 +20,17 @@ public:
     QString vehicle() const;
     Route* route() const;
 
-    int progress() const;
-    int total() const;
-    bool isComplete() const;
-
 public slots:
     void setVehicle(const QString& vehicle);
-
-    void setProgress(int progress);
-    void setTotal(int total);
 
 signals:
     void vehicleChanged(QString vehicle);
     void routeChanged(Route* route);
 
-    void progressChanged();
-    void totalChanged();
-    void completeChanged();
-
 private:
     const QString m_type;
     QString m_vehicle;
     Route* const m_route;
-
-    int m_progress = 0;
-    int m_total = 0;
 };
 } // namespace md::domain
 

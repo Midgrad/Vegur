@@ -31,9 +31,11 @@ QJsonObject Mission::toJson(bool recursive) const
 
 void Mission::fromJson(const QJsonObject& json)
 {
-    this->setVehicle(json.value(params::vehicle).toString());
+    if (json.contains(params::vehicle))
+        this->setVehicle(json.value(params::vehicle).toString());
 
-    m_route->fromJson(json.value(params::route).toObject());
+    if (json.contains(params::route))
+        m_route->fromJson(json.value(params::route).toObject());
 
     Entity::fromJson(json);
 }
@@ -53,21 +55,6 @@ Route* Mission::route() const
     return m_route;
 }
 
-int Mission::progress() const
-{
-    return m_progress;
-}
-
-int Mission::total() const
-{
-    return m_total;
-}
-
-bool Mission::isComplete() const
-{
-    return m_progress >= m_total;
-}
-
 void Mission::setVehicle(const QString& vehicle)
 {
     if (m_vehicle == vehicle)
@@ -75,32 +62,4 @@ void Mission::setVehicle(const QString& vehicle)
 
     m_vehicle = vehicle;
     emit vehicleChanged(vehicle);
-}
-
-void Mission::setProgress(int progress)
-{
-    if (m_progress == progress)
-        return;
-
-    bool complete = this->isComplete();
-
-    m_progress = progress;
-    emit progressChanged();
-
-    if (complete != this->isComplete())
-        emit completeChanged();
-}
-
-void Mission::setTotal(int total)
-{
-    if (m_total == total)
-        return;
-
-    bool complete = this->isComplete();
-
-    m_total = total;
-    emit totalChanged();
-
-    if (complete != this->isComplete())
-        emit completeChanged();
 }

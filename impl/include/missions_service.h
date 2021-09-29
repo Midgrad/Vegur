@@ -14,6 +14,7 @@ public:
     explicit MissionsService(data_source::IJsonGateway* repository, QObject* parent = nullptr);
 
     Mission* mission(const QVariant& id) const override;
+    MissionStatus status(const QVariant& id) const override;
     QList<Mission*> missions() const override;
     QStringList missionTypes() const override;
 
@@ -26,11 +27,13 @@ public slots:
     void removeMission(Mission* mission) override;
     void restoreMission(Mission* mission) override;
     void saveMission(Mission* mission) override;
+    void updateStatus(const QVariant& missionId, const MissionStatus& status) override;
 
 private:
     data_source::IJsonGateway* const m_repository;
     QList<QString> m_missionTypes;
     QMap<QVariant, Mission*> m_missions;
+    QMap<QVariant, MissionStatus> m_statuses;
 };
 } // namespace md::domain
 

@@ -18,6 +18,11 @@ Mission* MissionsService::mission(const QVariant& id) const
     return m_missions.value(id, nullptr);
 }
 
+MissionStatus MissionsService::status(const QVariant& id) const
+{
+    return m_statuses.value(id);
+}
+
 QList<Mission*> MissionsService::missions() const
 {
     return m_missions.values();
@@ -85,8 +90,8 @@ void MissionsService::removeMission(Mission* mission)
     if (!mission->id().isNull())
         m_repository->remove(mission->id());
 
-    if (m_missions.contains(mission->id()))
-        m_missions.remove(mission->id());
+    m_missions.remove(mission->id());
+    m_statuses.remove(mission->id());
 
     emit missionRemoved(mission);
     mission->deleteLater();
@@ -99,6 +104,7 @@ void MissionsService::restoreMission(Mission* mission)
 
     QJsonObject json = m_repository->read(mission->id());
     mission->fromJson(json);
+    emit missionChanged(mission);
 }
 
 void MissionsService::saveMission(Mission* mission)
@@ -111,10 +117,23 @@ void MissionsService::saveMission(Mission* mission)
 
     m_repository->save(mission->id(), mission->toJson(true));
 
-    if (!m_missions.contains(mission->id()))
+    if (m_missions.contains(mission->id()))
+    {
+        emit missionChanged(mission);
+    }
+    else
     {
         m_missions[mission->id()] = mission;
         mission->setParent(this);
         emit missionAdded(mission);
     }
+}
+
+void MissionsService::updateStatus(const QVariant& missionId, const MissionStatus& status)
+{
+    if (m_statuses.value(missionId) == status)
+        return;
+
+    m_statuses[missionId] = status;
+    emit statusUpdated(missionId, status);
 }

@@ -1,0 +1,54 @@
+#ifndef MISSIONS_CONTROLLER_H
+#define MISSIONS_CONTROLLER_H
+
+#include <QJsonArray>
+
+#include "i_missions_service.h"
+#include "i_property_tree.h"
+
+namespace md::presentation
+{
+class MissionsController : public QObject
+{
+    Q_OBJECT
+
+    Q_PROPERTY(QStringList vehicles READ vehicles NOTIFY vehiclesChanged)
+    Q_PROPERTY(QJsonArray missions READ missions NOTIFY missionsChanged)
+    Q_PROPERTY(QStringList missionTypes READ missionTypes NOTIFY missionTypesChanged)
+
+public:
+    explicit MissionsController(QObject* parent = nullptr);
+
+    QStringList vehicles() const;
+    QJsonArray missions() const;
+    QStringList missionTypes() const;
+
+    Q_INVOKABLE QJsonObject mission(const QVariant& missionId) const;
+    Q_INVOKABLE QJsonObject missionStatus(const QVariant& missionId) const;
+    Q_INVOKABLE QJsonObject route(const QVariant& missionId) const;
+
+public slots:
+    void addNewMission(const QString& missionType);
+    void saveMission(const QVariant& missionId, const QJsonObject& data);
+    void remove(const QVariant& missionId);
+    void assign(const QVariant& missionId, const QString& vehicle);
+    void upload(const QVariant& missionId);
+    void download(const QVariant& missionId);
+    void cancel(const QVariant& missionId);
+
+signals:
+    void vehiclesChanged();
+    void missionsChanged();
+    void missionTypesChanged();
+
+    void missionChanged(QVariant missionId);
+    void missionStatusChanged(QVariant missionId, QJsonObject status);
+    void routeChanged(QVariant missionId);
+
+private:
+    domain::IPropertyTree* const m_pTree;
+    domain::IMissionsService* const m_missionsService;
+};
+} // namespace md::presentation
+
+#endif // MISSIONS_CONTROLLER_H

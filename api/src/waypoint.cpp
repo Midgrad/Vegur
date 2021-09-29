@@ -27,7 +27,8 @@ QJsonObject Waypoint::toJson(bool recursive) const
 
 void Waypoint::fromJson(const QJsonObject& json)
 {
-    this->setType(json.value(params::type).toString());
+    if (json.contains(params::type))
+        this->setType(json.value(params::type).toString());
 
     Entity::fromJson(json);
 }

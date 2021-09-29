@@ -2,22 +2,24 @@ import QtQuick 2.6
 import QtQuick.Layouts 1.12
 import Industrial.Controls 1.0 as Controls
 import Industrial.Widgets 1.0 as Widgets
-import Dreka.Vegur 1.0
 
 Item {
     id: root
 
     property bool renameMode: false
-    readonly property var mission : controller.mission
-
-    property alias missionId : controller.missionId
+    property var mission: null
+    property var missionStatus: controller.missionStatus(mission.id)
 
     signal collapse()
 
     implicitWidth: column.implicitWidth
     implicitHeight: column.implicitHeight
 
-    MissionController { id: controller }
+    Connections {
+        target: controller
+        onMissionChanged: if (missionId === mission.id) mission = controller.mission(missionId)
+        onMissionStatusChanged: if (missionId === mission.id) missionStatus = status
+    }
 
     ColumnLayout {
         id: column
@@ -31,10 +33,7 @@ Item {
                 flat: true
                 iconSource: "qrc:/icons/left.svg"
                 tipText: qsTr("Back to missions")
-                onClicked: {
-                    controller.save();
-                    collapse();
-                }
+                onClicked: collapse()
             }
 
             Controls.Label {
@@ -54,7 +53,7 @@ Item {
                 flat: true
                 Binding on text { value: mission ? mission.name : ""; when: !nameEdit.activeFocus }
                 onEditingFinished: {
-                    mission.setName(text);
+                    controller.saveMission(mission.id, { name: text });
                     renameMode = false;
                 }
                 Layout.fillWidth: true
@@ -62,7 +61,7 @@ Item {
             }
 
             Controls.Label {
-                text: mission.type  ? mission.type : ""
+                text: mission.type ? mission.type : ""
                 type: Controls.Theme.Label
             }
 
@@ -72,7 +71,7 @@ Item {
                 labelText: qsTr("Vehicle")
                 model: controller.vehicles
                 displayText: mission ? mission.vehicle : ""
-                onActivated: controller.assign(currentItem)
+                onActivated: controller.assign(mission.id, currentItem)
             }
         }
 
@@ -81,9 +80,9 @@ Item {
             flat: true
             radius: Controls.Theme.rounding
             from: 0
-            visible: !controller.complete
-            to: controller.total
-            value: controller.progress
+            visible: !missionStatus.complete
+            to: missionStatus.total
+            value: missionStatus.progress
             Layout.fillWidth: true
 
             Controls.Button {
@@ -91,33 +90,28 @@ Item {
                 flat: true
                 tipText: qsTr("Cancel")
                 text: progress.value + "/" + progress.to
-                onClicked: controller.cancel()
+                onClicked: controller.cancel(mission.id)
             }
         }
 
         Controls.ButtonBar {
             id: bar
             flat: true
-            visible: controller.complete
+            visible: missionStatus.complete
             Layout.fillWidth: true
 
             Controls.Button {
                 text: qsTr("Download")
                 borderColor: Controls.Theme.colors.controlBorder
                 enabled: mission.vehicle ? mission.vehicle.length : false
-                onClicked: controller.download()
+                onClicked: controller.download(mission.id)
             }
 
             Controls.Button {
                 text: qsTr("Upload")
                 borderColor: Controls.Theme.colors.controlBorder
                 enabled: mission.vehicle ? mission.vehicle.length : false
-                onClicked: controller.upload()
-            }
-
-            Controls.Button {
-                text: qsTr("Cancel")
-                visible: false
+                onClicked: controller.upload(mission.id)
             }
 
             Controls.Button {
@@ -126,14 +120,14 @@ Item {
                 highlightColor: Controls.Theme.colors.negative
                 hoverColor: highlightColor
                 onClicked: {
-                    controller.remove();
+                    controller.remove(mission.id);
                     collapse();
                 }
             }
         }
 
         RouteView {
-            route: mission ? mission.route : null
+            route: controller.route(mission.id)
             Layout.fillWidth: true
             Layout.fillHeight: true
         }

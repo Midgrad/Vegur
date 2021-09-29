@@ -6,8 +6,7 @@
 
 #include "json_gateway_files.h"
 #include "locator.h"
-#include "mission_controller.h"
-#include "mission_list_controller.h"
+#include "missions_controller.h"
 #include "missions_service.h"
 
 namespace
@@ -19,9 +18,9 @@ using namespace md::app;
 
 void registerTypes()
 {
-    qmlRegisterType<md::presentation::MissionListController>("Dreka.Vegur", 1, 0,
-                                                             "MissionListController");
-    qmlRegisterType<md::presentation::MissionController>("Dreka.Vegur", 1, 0, "MissionController");
+    qRegisterMetaType<md::domain::MissionStatus>("MissionStatus");
+
+    qmlRegisterType<md::presentation::MissionsController>("Dreka.Vegur", 1, 0, "MissionsController");
 }
 
 Q_COREAPP_STARTUP_FUNCTION(registerTypes);

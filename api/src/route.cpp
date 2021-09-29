@@ -37,25 +37,28 @@ QJsonObject Route::toJson(bool recursive) const
 
 void Route::fromJson(const QJsonObject& json)
 {
-    QJsonArray waypoints = json.value(params::waypoints).toArray();
-    int counter = 0;
-    for (const QJsonValue& value : waypoints)
+    if (json.contains(params::waypoints))
     {
-        if (counter > m_waypoins.count())
+        QJsonArray waypoints = json.value(params::waypoints).toArray();
+        int counter = 0;
+        for (const QJsonValue& value : waypoints)
         {
-            m_waypoins.append(new Waypoint(value.toObject(), this));
+            if (counter > m_waypoins.count())
+            {
+                m_waypoins.append(new Waypoint(value.toObject(), this));
+            }
+            else
+            {
+                m_waypoins[counter]->fromJson(value.toObject());
+            }
+            counter++;
         }
-        else
-        {
-            m_waypoins[counter]->fromJson(value.toObject());
-        }
-        counter++;
-    }
 
-    // Remove tail from old route
-    while (m_waypoins.count() > waypoints.count())
-    {
-        this->removeWaypoint(m_waypoins.last());
+        // Remove tail from old route
+        while (m_waypoins.count() > waypoints.count())
+        {
+            this->removeWaypoint(m_waypoins.last());
+        }
     }
 
     Entity::fromJson(json);

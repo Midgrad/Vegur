@@ -9,9 +9,9 @@ Controls.Button {
 
     property var selectedMission: null
 
-    MissionListController { id: listController }
+    MissionsController { id: controller }
 
-    Component.onCompleted: map.registerController("missionsController", listController)
+    Component.onCompleted: map.registerController("missionsController", controller)
 
     iconSource: "qrc:/icons/mission.svg"
     tipText: qsTr("Missions")
@@ -26,7 +26,6 @@ Controls.Button {
         height: Math.min(implicitHeight, main.availableHeight)
         y: root.height + Controls.Theme.margins
         x: -root.parent.x
-        onClosed: missionsList.currentIndex = -1
 
         ColumnLayout {
             anchors.fill: parent
@@ -46,39 +45,41 @@ Controls.Button {
                 Controls.MenuButton {
                     flat: true
                     iconSource: "qrc:/icons/plus.svg"
-                    model: listController.missionTypes
+                    model: controller.missionTypes
                     delegate: Controls.MenuItem {
                         text: modelData
-                        onTriggered: listController.addNewMission(modelData)
+                        onTriggered: controller.addNewMission(modelData)
                     }
                 }
             }
 
-            Widgets.ListWrapper {
-                id: missionsList
-                visible: selectedMission === null
-                emptyText: qsTr("No Missions")
-                model: listController.missions
-                delegate: MissionView {
-                    width: parent.width
-                    height: visible ? implicitHeight : 0
-                    visible: mission && mission.name.includes(filterField.text)
-                    mission: modelData
-                    onExpand: selectedMission = mission
-                }
+            Loader {
+                sourceComponent: selectedMission ? missionEdit : missionsList
                 Layout.fillWidth: true
                 Layout.fillHeight: true
             }
 
-            MissionEditView {
-                visible: selectedMission !== null
-                missionId: selectedMission ? selectedMission.id : null
-                onCollapse: {
-                    missionsList.forceActiveFocus();
-                    selectedMission = null;
+            Component {
+                id: missionsList
+                Widgets.ListWrapper {
+                    emptyText: qsTr("No Missions")
+                    model: controller.missions
+                    delegate: MissionView {
+                        width: parent.width
+                        height: visible ? implicitHeight : 0
+                        visible: mission && mission.name.includes(filterField.text)
+                        mission: modelData
+                        onExpand: selectedMission = mission
+                    }
                 }
-                Layout.fillWidth: true
-                Layout.fillHeight: true
+            }
+
+            Component {
+                id: missionEdit
+                MissionEditView {
+                    mission: selectedMission
+                    onCollapse: selectedMission = null
+                }
             }
         }
     }
