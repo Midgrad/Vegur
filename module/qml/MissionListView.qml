@@ -68,7 +68,7 @@ Controls.Button {
                         width: parent.width
                         height: visible ? implicitHeight : 0
                         visible: mission && mission.name.includes(filterField.text)
-                        mission: modelData
+                        mission: controller.mission(modelData)
                         onExpand: selectedMission = mission
                     }
                 }

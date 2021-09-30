@@ -15,6 +15,7 @@ public:
 
     Mission* mission(const QVariant& id) const override;
     MissionStatus status(const QVariant& id) const override;
+    QVariantList missionIds() const override;
     QList<Mission*> missions() const override;
     QStringList missionTypes() const override;
 

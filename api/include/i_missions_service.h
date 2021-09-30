@@ -20,6 +20,7 @@ public:
 
     virtual Mission* mission(const QVariant& id) const = 0;
     virtual MissionStatus status(const QVariant& id) const = 0;
+    virtual QVariantList missionIds() const = 0;
     virtual QList<Mission*> missions() const = 0;
     virtual QStringList missionTypes() const = 0;
 

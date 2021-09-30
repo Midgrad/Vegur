@@ -39,16 +39,9 @@ QStringList MissionsController::vehicles() const
     return result;
 }
 
-QJsonArray MissionsController::missions() const
+QVariantList MissionsController::missions() const
 {
-    QJsonArray missions;
-
-    for (Mission* mission : m_missionsService->missions())
-    {
-        missions.append(mission->toJson(false));
-    }
-
-    return missions;
+    return m_missionsService->missionIds();
 }
 
 QStringList MissionsController::missionTypes() const

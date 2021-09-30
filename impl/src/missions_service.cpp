@@ -23,6 +23,11 @@ MissionStatus MissionsService::status(const QVariant& id) const
     return m_statuses.value(id);
 }
 
+QVariantList MissionsService::missionIds() const
+{
+    return m_missions.keys();
+}
+
 QList<Mission*> MissionsService::missions() const
 {
     return m_missions.values();

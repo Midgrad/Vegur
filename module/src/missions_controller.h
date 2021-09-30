@@ -1,8 +1,6 @@
 #ifndef MISSIONS_CONTROLLER_H
 #define MISSIONS_CONTROLLER_H
 
-#include <QJsonArray>
-
 #include "i_missions_service.h"
 #include "i_property_tree.h"
 
@@ -13,14 +11,14 @@ class MissionsController : public QObject
     Q_OBJECT
 
     Q_PROPERTY(QStringList vehicles READ vehicles NOTIFY vehiclesChanged)
-    Q_PROPERTY(QJsonArray missions READ missions NOTIFY missionsChanged)
+    Q_PROPERTY(QVariantList missions READ missions NOTIFY missionsChanged)
     Q_PROPERTY(QStringList missionTypes READ missionTypes NOTIFY missionTypesChanged)
 
 public:
     explicit MissionsController(QObject* parent = nullptr);
 
     QStringList vehicles() const;
-    QJsonArray missions() const;
+    QVariantList missions() const;
     QStringList missionTypes() const;
 
     Q_INVOKABLE QJsonObject mission(const QVariant& missionId) const;
