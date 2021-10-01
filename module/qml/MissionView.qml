@@ -30,26 +30,34 @@ Item {
     RowLayout {
         id: row
         anchors.fill: parent
-        anchors.margins: Controls.Theme.padding
         spacing: Controls.Theme.spacing
 
         Controls.Label {
             text: mission ? mission.name : ""
-            Layout.fillHeight: true
+            Layout.alignment: Qt.AlignVCenter
         }
 
         Controls.Label {
             text: mission ? mission.vehicle : ""
             type: Controls.Theme.Label
-            Layout.fillHeight: true
+            Layout.alignment: Qt.AlignVCenter
         }
 
         Item { Layout.fillWidth: true }
 
+        Controls.Button {
+            flat: true
+            radius: 0
+            iconSource: "qrc:/icons/center.svg"
+            onClicked: controller.centerRoute(mission.id)
+            Layout.alignment: Qt.AlignVCenter
+        }
+
         Controls.ColoredIcon {
-            implicitWidth: height
+            implicitWidth: Controls.Theme.iconSize
+            implicitHeight: width
             source: "qrc:/icons/right.svg"
-            Layout.fillHeight: true
+            Layout.alignment: Qt.AlignVCenter
         }
     }
 }

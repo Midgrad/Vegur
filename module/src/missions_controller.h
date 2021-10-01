@@ -43,6 +43,8 @@ signals:
     void missionStatusChanged(QVariant missionId, QJsonObject status);
     void routeChanged(QVariant missionId);
 
+    void centerRoute(QVariant missionId);
+
 private:
     domain::IPropertyTree* const m_pTree;
     domain::IMissionsService* const m_missionsService;
