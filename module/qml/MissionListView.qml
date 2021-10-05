@@ -11,6 +11,7 @@ Controls.Button {
 
     MissionsController { id: controller }
 
+    onSelectedMissionChanged: controller.editRoute(selectedMission ? selectedMission.id : null)
     Component.onCompleted: map.registerController("missionsController", controller)
 
     iconSource: "qrc:/icons/mission.svg"
@@ -61,6 +62,7 @@ Controls.Button {
 
             Component {
                 id: missionsList
+
                 Widgets.ListWrapper {
                     emptyText: qsTr("No Missions")
                     model: controller.missions
@@ -76,6 +78,7 @@ Controls.Button {
 
             Component {
                 id: missionEdit
+
                 MissionEditView {
                     mission: selectedMission
                     onCollapse: selectedMission = null

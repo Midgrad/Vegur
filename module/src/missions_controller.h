@@ -44,6 +44,7 @@ signals:
     void routeChanged(QVariant missionId);
 
     void centerRoute(QVariant missionId);
+    void editRoute(QVariant missionId);
 
 private:
     domain::IPropertyTree* const m_pTree;
