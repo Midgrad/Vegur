@@ -6,9 +6,11 @@ import Industrial.Widgets 1.0 as Widgets
 Item {
     id: root
 
-    property bool renameMode: false
     property var mission: null
     property var missionStatus: controller.missionStatus(mission.id)
+
+    property bool missionPropertiesVisible: true
+    property bool routePropertiesVisible: false
 
     signal collapse()
 
@@ -26,43 +28,26 @@ Item {
         anchors.fill: parent
         spacing: Controls.Theme.spacing
 
-        RowLayout {
-            spacing: Controls.Theme.spacing
+        // TODO: ListButton
+        Controls.Button {
+            text: qsTr("Mission")
+            flat: true
+            iconSource: missionPropertiesVisible ? "qrc:/icons/down.svg" : "qrc:/icons/right.svg"
+            onClicked: missionPropertiesVisible = !missionPropertiesVisible
+            Layout.fillWidth: true
+        }
 
-            Controls.Button {
-                flat: true
-                iconSource: "qrc:/icons/left.svg"
-                tipText: qsTr("Back to missions")
-                onClicked: collapse()
-            }
-
-            Controls.Label {
-                text: mission.name ? mission.name : ""
-                visible: !renameMode
-                Layout.fillWidth: true
-
-                MouseArea {
-                    anchors.fill: parent
-                    onDoubleClicked: renameMode = true
-                }
-            }
+        Widgets.PropertyTable {
+            visible: missionPropertiesVisible
+            flat: true
+            labelWidth: Controls.Theme.baseSize * 6
+            Layout.fillWidth: true
 
             Controls.TextField {
                 id: nameEdit
-                visible: renameMode
-                flat: true
-                Binding on text { value: mission ? mission.name : ""; when: !nameEdit.activeFocus }
-                onEditingFinished: {
-                    controller.saveMission(mission.id, { name: text });
-                    renameMode = false;
-                }
-                Layout.fillWidth: true
-                Layout.fillHeight: true
-            }
-
-            Controls.Label {
-                text: mission.type ? mission.type : ""
-                type: Controls.Theme.Label
+                labelText: qsTr("Name")
+                Binding on text { value: mission.name ? mission.name : ""; when: !nameEdit.activeFocus }
+                onEditingFinished: controller.saveMission(mission.id, { name: text });
             }
 
             Controls.ComboBox {
@@ -73,14 +58,19 @@ Item {
                 displayText: mission ? mission.vehicle : ""
                 onActivated: controller.assign(mission.id, currentItem)
             }
+
+            Controls.ComboBox {
+                labelText: qsTr("Type")
+                displayText: mission.type ? mission.type : ""
+            }
         }
 
         Controls.ProgressBar {
             id: progress
+            visible: !missionStatus.complete && missionPropertiesVisible
             flat: true
             radius: Controls.Theme.rounding
             from: 0
-            visible: !missionStatus.complete
             to: missionStatus.total
             value: missionStatus.progress
             Layout.fillWidth: true
@@ -97,7 +87,7 @@ Item {
         Controls.ButtonBar {
             id: bar
             flat: true
-            visible: missionStatus.complete
+            visible: missionStatus.complete && missionPropertiesVisible
             Layout.fillWidth: true
 
             Controls.Button {
@@ -126,7 +116,18 @@ Item {
             }
         }
 
+        // TODO: ListButton
+        Controls.Button {
+            flat: true
+            text: qsTr("Route")
+            iconSource: routePropertiesVisible ? "qrc:/icons/down.svg" : "qrc:/icons/right.svg"
+            onClicked: routePropertiesVisible = !routePropertiesVisible
+            Layout.fillWidth: true
+        }
+
         RouteView {
+            id: routeList
+            visible: routePropertiesVisible
             route: controller.route(mission.id)
             Layout.fillWidth: true
             Layout.fillHeight: true

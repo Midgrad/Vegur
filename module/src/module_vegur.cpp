@@ -42,5 +42,5 @@ ModuleVegur::~ModuleVegur()
 
 void ModuleVegur::visit(QJsonObject& features)
 {
-    md::utils::insertInArray(features, "menu", "qrc:/Vegur/MissionListView.qml");
+    md::utils::insertInArray(features, "menu", "qrc:/Vegur/Vegur.qml");
 }

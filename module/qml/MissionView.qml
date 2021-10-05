@@ -59,6 +59,7 @@ Item {
             implicitHeight: width
             source: "qrc:/icons/right.svg"
             Layout.alignment: Qt.AlignVCenter
+            Layout.rightMargin: Controls.Theme.padding
         }
     }
 }
