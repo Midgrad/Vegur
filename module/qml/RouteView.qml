@@ -28,6 +28,7 @@ ColumnLayout {
             color: "transparent"
             expanded: waypointsList.currentIndex === index
             collapsedItem: WaypointView {
+                waypointIndex: index
                 waypoint: modelData
                 onExpand: waypointsList.currentIndex = index
             }

@@ -49,6 +49,7 @@ Item {
             flat: true
             radius: 0
             iconSource: "qrc:/icons/center.svg"
+            tipText: qsTr("Center on route")
             onClicked: controller.centerRoute(mission.id)
             Layout.alignment: Qt.AlignVCenter
         }

@@ -7,6 +7,7 @@ Item {
     id: root
 
     property var waypoint
+    property int waypointIndex: 0
 
     signal expand()
 
@@ -31,19 +32,26 @@ Item {
     RowLayout {
         id: row
         anchors.fill: parent
-        anchors.margins: Controls.Theme.padding
         spacing: Controls.Theme.spacing
+
+        Controls.Button {
+            flat: true
+            rightCropped: true
+            iconSource: "qrc:/icons/center.svg"
+            tipText: qsTr("Center on waypoint")
+            onClicked: controller.centerWaypoint(mission.id, waypointIndex)
+        }
 
         Controls.Label {
             text: waypoint ? waypoint.name : ""
-            Layout.fillHeight: true
+            Layout.alignment: Qt.AlignVCenter
             Layout.fillWidth: true
         }
 
         Controls.Label {
             text: waypoint ? waypoint.type : ""
             type: Controls.Theme.Label
-            Layout.fillHeight: true
+            Layout.alignment: Qt.AlignVCenter
         }
     }
 }

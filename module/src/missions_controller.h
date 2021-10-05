@@ -45,6 +45,7 @@ signals:
 
     void centerRoute(QVariant missionId);
     void editRoute(QVariant missionId);
+    void centerWaypoint(QVariant missionId, int index);
 
 private:
     domain::IPropertyTree* const m_pTree;
