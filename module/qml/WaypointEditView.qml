@@ -27,5 +27,33 @@ ColumnLayout {
             labelText: qsTr("Type")
             displayText: waypoint ? waypoint.type : ""
         }
+
+        Controls.CoordSpinBox {
+            labelText: qsTr("Latitude")
+            visible: waypoint.params.latitude !== undefined
+            value: visible ? waypoint.params.latitude : 0
+        }
+
+        Controls.CoordSpinBox {
+            labelText: qsTr("Longitude")
+            isLongitude: true
+            visible: waypoint.params.longitude !== undefined
+            value: visible ? waypoint.params.longitude : 0
+        }
+
+        Controls.RealSpinBox {
+            id: altitudeBox
+            labelText: qsTr("Altitude")
+            realFrom: -500
+            realTo: 9999
+            visible: waypoint.params.altitude !== undefined
+            Binding on realValue { value: waypoint.params.altitude; when: !altitudeBox.activeFocus  && altitudeBox.visible }
+        }
+
+        Controls.CheckBox {
+            text: qsTr("Relative")
+            visible: waypoint.params.relative !== undefined
+            checked: visible && waypoint.params.relative
+        }
     }
 }
