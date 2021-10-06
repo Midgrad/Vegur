@@ -17,7 +17,7 @@ MissionsController::MissionsController(QObject* parent) :
 
     Q_ASSERT(m_missionsService);
     connect(m_missionsService, &IMissionsService::missionTypesChanged, this,
-            &MissionsController::missionsChanged);
+            &MissionsController::missionTypesChanged);
     connect(m_missionsService, &IMissionsService::missionAdded, this,
             &MissionsController::missionsChanged);
     connect(m_missionsService, &IMissionsService::missionRemoved, this,
@@ -46,7 +46,12 @@ QVariantList MissionsController::missions() const
 
 QStringList MissionsController::missionTypes() const
 {
-    return m_missionsService->missionTypes();
+    QStringList missionTypes;
+    for (auto missionType : m_missionsService->missionTypes())
+    {
+        missionTypes += missionType->name;
+    }
+    return missionTypes;
 }
 
 QJsonObject MissionsController::mission(const QVariant& missionId) const

@@ -1,6 +1,7 @@
 #ifndef MISSION_H
 #define MISSION_H
 
+#include "mission_type.h"
 #include "route.h"
 
 namespace md::domain

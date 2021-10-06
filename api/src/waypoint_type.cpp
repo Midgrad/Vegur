@@ -37,14 +37,6 @@ QVariant Parameter::guard(const QVariant& value) const
     return value;
 }
 
-namespace md::domain
-{
-bool operator==(const Parameter& left, const Parameter& right)
-{
-    return left.name == right.name;
-}
-} // namespace md::domain
-
 WaypointType::WaypointType(const QString& name, const QVector<Parameter>& parameters) :
     name(name),
     parameters(parameters)
@@ -86,3 +78,11 @@ void WaypointType::resetParameter(Waypoint* waypoint, const QString& key) const
 
     waypoint->setParameter(key, parameter.defaultValue);
 }
+
+namespace md::domain
+{
+bool operator==(const Parameter& left, const Parameter& right)
+{
+    return left.name == right.name;
+}
+} // namespace md::domain

@@ -17,10 +17,10 @@ public:
     MissionStatus status(const QVariant& id) const override;
     QVariantList missionIds() const override;
     QList<Mission*> missions() const override;
-    QStringList missionTypes() const override;
+    QList<const MissionType*> missionTypes() const override;
 
-    void registerMissionType(const QString& type) override;
-    void unregisterMissionType(const QString& type) override;
+    void registerMissionType(const MissionType* type) override;
+    void unregisterMissionType(const MissionType* type) override;
 
 public slots:
     void readAllMissions() override;
@@ -32,7 +32,7 @@ public slots:
 
 private:
     data_source::IJsonGateway* const m_repository;
-    QList<QString> m_missionTypes;
+    QList<const MissionType*> m_missionTypes;
     QMap<QVariant, Mission*> m_missions;
     QMap<QVariant, MissionStatus> m_statuses;
 };

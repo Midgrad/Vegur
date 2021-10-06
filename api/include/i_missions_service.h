@@ -22,10 +22,10 @@ public:
     virtual MissionStatus status(const QVariant& id) const = 0;
     virtual QVariantList missionIds() const = 0;
     virtual QList<Mission*> missions() const = 0;
-    virtual QStringList missionTypes() const = 0;
+    virtual QList<const MissionType*> missionTypes() const = 0;
 
-    virtual void registerMissionType(const QString& type) = 0;
-    virtual void unregisterMissionType(const QString& type) = 0;
+    virtual void registerMissionType(const MissionType* type) = 0;
+    virtual void unregisterMissionType(const MissionType* type) = 0;
 
 public slots:
     virtual void readAllMissions() = 0;
@@ -36,7 +36,7 @@ public slots:
     virtual void updateStatus(const QVariant& missionId, const MissionStatus& status) = 0;
 
 signals:
-    void missionTypesChanged(QStringList missionTypes);
+    void missionTypesChanged();
 
     void missionAdded(Mission* mission);
     void missionChanged(Mission* mission);

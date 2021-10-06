@@ -33,27 +33,27 @@ QList<Mission*> MissionsService::missions() const
     return m_missions.values();
 }
 
-QStringList MissionsService::missionTypes() const
+QList<const MissionType*> MissionsService::missionTypes() const
 {
     return m_missionTypes;
 }
 
-void MissionsService::registerMissionType(const QString& type)
+void MissionsService::registerMissionType(const MissionType* type)
 {
     if (m_missionTypes.contains(type))
         return;
 
     m_missionTypes.append(type);
-    emit missionTypesChanged(m_missionTypes);
+    emit missionTypesChanged();
 }
 
-void MissionsService::unregisterMissionType(const QString& type)
+void MissionsService::unregisterMissionType(const MissionType* type)
 {
     if (!m_missionTypes.contains(type))
         return;
 
     m_missionTypes.removeOne(type);
-    emit missionTypesChanged(m_missionTypes);
+    emit missionTypesChanged();
 }
 
 void MissionsService::readAllMissions()
