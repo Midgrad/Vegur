@@ -25,17 +25,21 @@ void registerTypes()
 
 Q_COREAPP_STARTUP_FUNCTION(registerTypes);
 
-ModuleVegur::ModuleVegur()
+ModuleVegur::ModuleVegur() :
+    m_missionService(
+        new domain::MissionsService(new data_source::JsonGatewayFiles(::missionsFolder), this))
 {
-    auto missionsService = new domain::MissionsService(new data_source::JsonGatewayFiles(
-                                                           ::missionsFolder),
-                                                       this);
-    Locator::provide<domain::IMissionsService>(missionsService);
+    Locator::provide<domain::IMissionsService>(m_missionService);
 }
 
 ModuleVegur::~ModuleVegur()
 {
     Locator::unprovide<domain::IMissionsService>();
+}
+
+void ModuleVegur::start()
+{
+    m_missionService->readAllMissions();
 }
 
 void ModuleVegur::visit(QJsonObject& features)
