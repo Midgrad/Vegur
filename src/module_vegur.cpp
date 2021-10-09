@@ -30,8 +30,6 @@ ModuleVegur::ModuleVegur()
     auto missionsService = new domain::MissionsService(new data_source::JsonGatewayFiles(
                                                            ::missionsFolder),
                                                        this);
-    missionsService->readAllMissions();
-
     Locator::provide<domain::IMissionsService>(missionsService);
 }
 
