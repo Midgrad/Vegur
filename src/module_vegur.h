@@ -1,6 +1,7 @@
 #ifndef MODULE_VEGUR_H
 #define MODULE_VEGUR_H
 
+#include "i_missions_service.h"
 #include "i_module.h"
 
 namespace md::app
@@ -17,7 +18,7 @@ public:
     Q_INVOKABLE ModuleVegur();
     ~ModuleVegur() override;
 
-    void visit(QJsonObject& features) override;
+    void init() override;
 };
 } // namespace md::app
 
