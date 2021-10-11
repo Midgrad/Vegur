@@ -4,13 +4,17 @@
 #include <QGuiApplication>
 #include <QQmlEngine>
 
-#include "routes_controller.h"
+#include "i_gui_layout.h"
+#include "locator.h"
+#include "missions_controller.h"
 
 using namespace md::app;
 
 void registerTypes()
 {
-    qmlRegisterType<md::presentation::RoutesController>("Dreka.Vegur", 1, 0, "RoutesController");
+    qRegisterMetaType<md::domain::MissionStatus>("MissionStatus");
+
+    qmlRegisterType<md::presentation::MissionsController>("Dreka.Vegur", 1, 0, "MissionsController");
 }
 
 Q_COREAPP_STARTUP_FUNCTION(registerTypes);
@@ -19,7 +23,12 @@ ModuleVegur::ModuleVegur()
 {
 }
 
-void ModuleVegur::visit(QJsonObject& features)
+ModuleVegur::~ModuleVegur()
 {
-    md::utils::insertInArray(features, "menu", "qrc:/Vegur/RoutesView.qml");
+    Locator::unprovide<domain::IMissionsService>();
+}
+
+void ModuleVegur::init()
+{
+    Locator::get<presentation::IGuiLayout>()->addItem("menu", "qrc:/Vegur/Vegur.qml");
 }
