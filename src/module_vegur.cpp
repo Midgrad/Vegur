@@ -4,6 +4,7 @@
 #include <QGuiApplication>
 #include <QQmlEngine>
 
+#include "i_gui_layout.h"
 #include "locator.h"
 #include "missions_controller.h"
 
@@ -27,7 +28,7 @@ ModuleVegur::~ModuleVegur()
     Locator::unprovide<domain::IMissionsService>();
 }
 
-void ModuleVegur::visit(QJsonObject& features)
+void ModuleVegur::init()
 {
-    md::utils::insertInArray(features, "menu", "qrc:/Vegur/Vegur.qml");
+    Locator::get<presentation::IGuiLayout>()->addItem("menu", "qrc:/Vegur/Vegur.qml");
 }

@@ -18,7 +18,7 @@ public:
     Q_INVOKABLE ModuleVegur();
     ~ModuleVegur() override;
 
-    void visit(QJsonObject& features) override;
+    void init() override;
 };
 } // namespace md::app
 
