@@ -18,11 +18,7 @@ public:
     Q_INVOKABLE ModuleVegur();
     ~ModuleVegur() override;
 
-    void start() override;
     void visit(QJsonObject& features) override;
-
-private: // TODO: move to core4
-    domain::IMissionsService* m_missionService = nullptr;
 };
 } // namespace md::app
 
