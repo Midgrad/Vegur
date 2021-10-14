@@ -47,6 +47,10 @@ signals:
     void editRoute(QVariant missionId);
     void centerWaypoint(QVariant missionId, int index);
 
+private slots:
+    void onMissionAdded(domain::Mission* mission);
+    void onMissionRemoved(domain::Mission* mission);
+
 private:
     domain::IPropertyTree* const m_pTree;
     domain::IMissionsService* const m_missionsService;

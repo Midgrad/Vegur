@@ -19,16 +19,17 @@ MissionsController::MissionsController(QObject* parent) :
     connect(m_missionsService, &IMissionsService::missionTypesChanged, this,
             &MissionsController::missionTypesChanged);
     connect(m_missionsService, &IMissionsService::missionAdded, this,
-            &MissionsController::missionsChanged);
+            &MissionsController::onMissionAdded);
     connect(m_missionsService, &IMissionsService::missionRemoved, this,
-            &MissionsController::missionsChanged);
+            &MissionsController::onMissionRemoved);
     connect(m_missionsService, &IMissionsService::missionChanged, this, [this](Mission* mission) {
         emit missionChanged(mission->id());
     });
-    connect(m_missionsService, &IMissionsService::statusUpdated, this,
-            [this](const QVariant& missionId, const MissionStatus& status) {
-                emit missionStatusChanged(missionId, status.toJson());
-            });
+
+    for (Mission* mission : m_missionsService->missions())
+    {
+        this->onMissionAdded(mission);
+    }
 }
 
 QStringList MissionsController::vehicles() const
@@ -65,7 +66,11 @@ QJsonObject MissionsController::mission(const QVariant& missionId) const
 
 QJsonObject MissionsController::missionStatus(const QVariant& missionId) const
 {
-    return m_missionsService->status(missionId).toJson();
+    Mission* mission = m_missionsService->mission(missionId);
+    if (!mission)
+        return QJsonObject();
+
+    return mission->status().toJson();
 }
 
 QJsonObject MissionsController::route(const QVariant& missionId) const
@@ -129,7 +134,7 @@ void MissionsController::upload(const QVariant& missionId)
     if (!mission)
         return;
 
-    emit m_missionsService->upload(mission);
+    emit mission->upload();
 }
 
 void MissionsController::download(const QVariant& missionId)
@@ -138,7 +143,7 @@ void MissionsController::download(const QVariant& missionId)
     if (!mission)
         return;
 
-    emit m_missionsService->download(mission);
+    emit mission->download();
 }
 
 void MissionsController::cancel(const QVariant& missionId)
@@ -147,5 +152,20 @@ void MissionsController::cancel(const QVariant& missionId)
     if (!mission)
         return;
 
-    emit m_missionsService->cancel(mission);
+    emit mission->cancel();
+}
+
+void MissionsController::onMissionAdded(Mission* mission)
+{
+    connect(mission, &Mission::statusChanged, this, [this, mission](MissionStatus status) {
+        qDebug() << status.progress();
+        emit missionStatusChanged(mission->id(), status.toJson());
+    });
+    emit missionsChanged();
+}
+
+void MissionsController::onMissionRemoved(Mission* mission)
+{
+    disconnect(mission, nullptr, this, nullptr);
+    emit missionsChanged();
 }
