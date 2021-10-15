@@ -6,6 +6,7 @@
 
 namespace md::presentation
 {
+// TODO: routes controller
 class MissionsController : public QObject
 {
     Q_OBJECT
@@ -29,7 +30,6 @@ public slots:
     void addNewMission(const QString& missionType);
     void saveMission(const QVariant& missionId, const QJsonObject& data);
     void remove(const QVariant& missionId);
-    void assign(const QVariant& missionId, const QString& vehicle);
     void upload(const QVariant& missionId);
     void download(const QVariant& missionId);
     void cancel(const QVariant& missionId);

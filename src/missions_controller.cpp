@@ -84,7 +84,7 @@ QJsonObject MissionsController::route(const QVariant& missionId) const
 
 void MissionsController::addNewMission(const QString& missionType)
 {
-    m_missionsService->createMission(missionType);
+    // TODO creaate new route()
 }
 
 void MissionsController::saveMission(const QVariant& missionId, const QJsonObject& data)
@@ -104,28 +104,6 @@ void MissionsController::remove(const QVariant& missionId)
         return;
 
     m_missionsService->removeMission(mission);
-}
-
-void MissionsController::assign(const QVariant& missionId, const QString& vehicle)
-{
-    Mission* mission = m_missionsService->mission(missionId);
-    if (!mission)
-        return;
-
-    for (domain::Mission* oldMission : m_missionsService->missions())
-    {
-        if (oldMission->vehicle() == vehicle)
-        {
-            if (oldMission == mission)
-                return;
-
-            oldMission->setVehicle(QString());
-            m_missionsService->saveMission(oldMission);
-        }
-    }
-
-    mission->setVehicle(vehicle);
-    m_missionsService->saveMission(mission);
 }
 
 void MissionsController::upload(const QVariant& missionId)
@@ -158,7 +136,6 @@ void MissionsController::cancel(const QVariant& missionId)
 void MissionsController::onMissionAdded(Mission* mission)
 {
     connect(mission, &Mission::statusChanged, this, [this, mission](MissionStatus status) {
-        qDebug() << status.progress();
         emit missionStatusChanged(mission->id(), status.toJson());
     });
     emit missionsChanged();
