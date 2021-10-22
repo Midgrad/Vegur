@@ -1,14 +1,11 @@
 import QtQuick 2.6
 import QtQuick.Layouts 1.12
 import Industrial.Controls 1.0 as Controls
-import Dreka.Vegur 1.0
 
 Item {
     id: root
 
     property var selectedMission: null
-
-    MissionsController { id: controller }
 
     onSelectedMissionChanged: controller.editRoute(selectedMission ? selectedMission.id : null)
     Component.onCompleted: map.registerController("missionsController", controller)
